@@ -1,0 +1,44 @@
+<% layout('layouts/boilerplate') %>
+
+<!-- BODY -->
+<main>
+    <div class="container-lg d-flex flex-column">
+        <div class="row align-items-center justify-content-center min-vh-100 pt-108 mt-n1">
+            <div class="col-12 col-md-7 col-lg-5 text-center">
+
+                <!-- Pre-heading -->
+                <h6 class="text-uppercase text-warning mb-5">
+                    <%= err.statusCode %>
+                </h6>
+
+                <!-- Heading -->
+                <h1 class="display-3 mb-4">
+                    Uh oh.
+                </h1>
+
+                <!-- Text -->
+                <% if (err.statusCode === 404) { %>
+                <p class="text-muted">
+                    There’s nothing here, but if you feel this is an error, please <a
+                        href="/contact">contact us</a>.
+                </p>
+                <% } else { %>
+                <p class="text-muted">
+                    <%= err.message %>
+                </p>
+                <% } %>
+
+                <% if (process.env.NODE_ENV !== "production" && err.statusCode !== 404) { %>
+                <p>
+                    <%= err.stack %>
+                </p>
+                <% } %>
+
+                <!-- Button -->
+                <button class="btn btn-primary" onclick="window.history.back()">
+                    Go back
+                </button>
+            </div>
+        </div>
+    </div>
+</main>

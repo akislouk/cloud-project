@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="el">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="theme-color" content="#ffffff" />
+
+        <!-- Icons -->
+        <link rel="icon" href="/images/favicon.svg" />
+        <link rel="apple-touch-icon" href="/images/logo.svg" />
+
+        <!-- Manifest -->
+        <link rel="manifest" href="/manifest.json" />
+
+        <!-- Timologio PRO CSS -->
+        <link rel="stylesheet" href="/styles/app.css" />
+
+        <title>Timologio PRO</title>
+    </head>
+
+    <body>
+        <!-- NAVBAR -->
+        <%#- include("../partials/navbar") %>
+
+        <!-- FLASH -->
+        <%#- include("../partials/flash") %>
+
+        <!-- PAGE CONTENT  -->
+        <%- body %>
+
+        <!-- FOOTER -->
+        <%#- include('../partials/footer') %>
+
+        <!-- JAVASCRIPT -->
+        <!-- Theme JS -->
+        <!-- <script src="/assets/js/theme.bundle.js"></script> -->
+
+        <!-- Change Title -->
+        <script>
+            const title = "<%= title || '' %>";
+            if (title !== "") document.title = title + " - Timologio PRO";
+        </script>
+
+        <!-- Validation Script -->
+        <!-- <script src="/scripts/validate.js"></script> -->
+    </body>
+</html>
