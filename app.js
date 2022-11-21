@@ -9,10 +9,10 @@ import session from "express-session";
 import MySQLStore from "express-mysql-session";
 import flash from "connect-flash";
 
-import { init } from "./models/db.js";
 import ExpressError from "./utils/ExpressError.js";
-import usersRoutes from "./routes/users.js";
+import { init } from "./models/db.js";
 import User from "./models/user.js";
+import usersRoutes from "./routes/users.js";
 
 // initializing the database
 init();
@@ -85,10 +85,10 @@ app.all("*", (req, res, next) =>
 app.use((err, req, res, next) => {
     const { statusCode = 500 } = err;
     if (!err.message) err.message = "Κάτι πήγε στραβά!";
-    res.status(statusCode).render("error", { err, title: "Error" });
+    res.status(statusCode).render("error", { err, title: "Σφάλμα" });
 });
 
 const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(`Serving on port ${port}`));
+app.listen(port, () => console.log("Serving on port", port));
 
 export default app;

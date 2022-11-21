@@ -39,5 +39,9 @@ CREATE TABLE IF NOT EXISTS cart (
         ON UPDATE CASCADE ON DELETE CASCADE
 );
 
-INSERT INTO user (name, surname, username, salt, hash, email, role, confirmed)
-SELECT 'John', 'Doe', 'admin', 'QqjnpsFF-B0i-xzVq_sk0A', UNHEX('c9f67cd0e7e9d34a26b8648419a6808cf0da05ab143ea14fc12597cc9512752a1e4368b1ba65784ab1d0a48497cfb2da62ce7466a816cd7b6e497694e5ec8199'), 'sloukatos@tuc.gr', 'admin', 1;
+-- INSERT INTO user (name, surname, username, salt, hash, email, role, confirmed)
+-- SELECT 'John', 'Doe', 'admin', 'QqjnpsFF-B0i-xzVq_sk0A', UNHEX('c9f67cd0e7e9d34a26b8648419a6808cf0da05ab143ea14fc12597cc9512752a1e4368b1ba65784ab1d0a48497cfb2da62ce7466a816cd7b6e497694e5ec8199'), 'sloukatos@tuc.gr', 'admin', 1;
+
+SELECT id, name, surname, salt, hex(hash) AS hash, email, role, confirmed
+FROM user 
+WHERE username = 'admin'
