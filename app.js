@@ -1,61 +1,46 @@
-if (process.env.NODE_ENV !== "production") require("dotenv").config();
-const express = require("express");
-const ejsMate = require("ejs-mate");
-const path = require("path");
-const methodOverride = require("method-override");
-const session = require("express-session");
-const flash = require("connect-flash");
-const mysql = require("mysql");
-const MySQLStore = require("express-mysql-session")(session);
+import dotenv from "dotenv";
+if (process.env.NODE_ENV !== "production") dotenv.config();
+import express from "express";
+import ejsMate from "ejs-mate";
+import methodOverride from "method-override";
+import { fileURLToPath } from "url";
+import { join, dirname } from "path";
+import session from "express-session";
+import MySQLStore from "express-mysql-session";
+import flash from "connect-flash";
 
-const ExpressError = require("./utils/ExpressError");
-// const usersRoutes = require("./routes/users");
-// const User = require("./models/user");
+import { init } from "./models/db.js";
+import ExpressError from "./utils/ExpressError.js";
+import usersRoutes from "./routes/users.js";
+import User from "./models/user.js";
 
-const connection = mysql.createConnection({
-    host: process.env.DB_HOST || "localhost",
-    port: process.env.DB_PORT || 3306,
-    user: process.env.DB_USER || "root",
-    password: process.env.DB_PASS || "akis11",
-});
-
-connection.connect();
-connection.query(
-    "CREATE DATABASE IF NOT EXISTS " + process.env.DB || "project",
-    function (error) {
-        if (error) throw error;
-        console.log("Project database created");
-    }
-);
-connection.query(
-    "CREATE DATABASE IF NOT EXISTS " + process.env.DB_SESSION || "session",
-    function (error) {
-        if (error) throw error;
-        console.log("Session database created");
-    }
-);
-connection.end();
+// initializing the database
+init();
 
 const app = express();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
+app.set("views", join(__dirname, "views"));
 
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(join(__dirname, "public")));
 app.use(methodOverride("_method"));
 
-const secret = process.env.SECRET || "ProjectSecret";
-const store = new MySQLStore({
+// setting up session database
+const store = new (MySQLStore(session))({
     host: process.env.DB_HOST || "localhost",
     port: process.env.DB_PORT || 3306,
     user: process.env.DB_USER || "root",
     password: process.env.DB_PASS || "akis11",
     database: process.env.DB_SESSION || "session",
 });
-store.on("error", (error) => console.log("STORE ERROR ", error));
+store.on("error", (error) => console.log("Store error ", error));
 
+// setting up session cookie
+const secret = process.env.SECRET || "ProjectSecret";
 const sessionConfig = {
     store,
     name: "session",
@@ -71,6 +56,15 @@ const sessionConfig = {
 app.use(session(sessionConfig));
 app.use(flash());
 
+// setting the current user to the request object
+app.use(async (req, res, next) => {
+    if (req.session.user_id)
+        req.user = await User.findById(req.session.user_id);
+    else req.user = null;
+    next();
+});
+
+// passing stuff to the frontend
 app.use((req, res, next) => {
     res.locals.user = req.user;
     res.locals.query = req.query;
@@ -79,21 +73,15 @@ app.use((req, res, next) => {
     next();
 });
 
-// app.use("/users", usersRoutes);
+// using my routes
+app.use("/", usersRoutes);
 
-// Homepage
-app.get("/", (req, res) =>
-    res.render("home", {
-        title: "Cloud",
-    })
-);
-
-// Sends back a 404 error if the user tries to access a route that doesn't exist
+// sending a 404 error if the user tries to access a route that doesn't exist
 app.all("*", (req, res, next) =>
     next(new ExpressError("Η σελίδα δεν βρέθηκε", 404))
 );
 
-// Generic error message for errors that we haven't handled elsewhere
+// generic error message for errors that weren't handled elsewhere
 app.use((err, req, res, next) => {
     const { statusCode = 500 } = err;
     if (!err.message) err.message = "Κάτι πήγε στραβά!";
@@ -103,4 +91,4 @@ app.use((err, req, res, next) => {
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Serving on port ${port}`));
 
-module.exports = app;
+export default app;
