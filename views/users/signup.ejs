@@ -12,10 +12,10 @@
                     Εισάγετε τα στοιχεία σας παρακάτω για να ολοκληρώσετε τη διαδικασία εγγραφής.
                 </p>
 
-                <form class="validate-form mb-6" action="/signup" method="post" novalidate>
+                <form class="validate-form" action="/signup.php" method="post" novalidate>
 
                     <!-- Name -->
-                    <div class="input-group mb-5">
+                    <div class="input-group mb-4">
                         <div class="form-group form-floating text-start mb-0">
                             <input class="form-control" id="name" name="name" type="text"
                                 placeholder="Όνομα" pattern="[\p{L} ,.'’-]{0,50}$" required
@@ -38,40 +38,39 @@
                     </div>
 
                     <!-- Username -->
-                    <div class="form-group form-floating text-start">
+                    <div class="form-group form-floating text-start mb-4">
                         <input class="form-control" id="username" name="username" type="text"
                             placeholder="Όνομα χρήστη" maxlength="100" required>
                         <label class="text-muted opacity-100" for="username">
                             Όνομα χρήστη
                         </label>
-                        <div class="invalid-feedback">Παρακαλώ εισάγετε ένα έγκυρο username.</div>
+                        <div class="invalid-feedback">
+                            Παρακαλώ εισάγετε ένα έγκυρο όνομα χρήστη.
+                        </div>
                     </div>
 
                     <!-- Password -->
-                    <div class="form-group">
-                        <div class="input-group">
-                            <div class="form-floating text-start">
-                                <input class="form-control" id="password" name="password"
-                                    placeholder="Κωδικός" type="password" required
-                                    aria-label="Κωδικός" aria-describedby="password-caption"
-                                    oninput="passwordValidate()">
-                                <label class="text-muted opacity-100" for="password">
-                                    Κωδικός
-                                </label>
-                            </div>
-                            <a class="input-group-text text-decoration-none text-gray-500"
-                                id="password-caption" data-bs-toggle="password" href="#password"
-                                onclick="eyeHandler(this.children[0])">
-                                <i class="bi bi-eye" id="eye"></i>
-                            </a>
-                            <div class="invalid-feedback text-start" id="password-error">
-                                Παρακαλώ εισάγετε κωδικό.
-                            </div>
+                    <div class="input-group mb-4">
+                        <div class="form-floating text-start">
+                            <input class="form-control" id="password" name="password"
+                                placeholder="Κωδικός" type="password" minlength="4" maxlength="20"
+                                required aria-label="Κωδικός" aria-describedby="password-caption"
+                                oninput="passwordValidate()">
+                            <label class="text-muted opacity-100" for="password">
+                                Κωδικός
+                            </label>
+                        </div>
+                        <a class="input-group-text text-decoration-none text-gray-500"
+                            id="password-caption" href="#password">
+                            <i class="bi bi-eye"></i>
+                        </a>
+                        <div class="invalid-feedback text-start" id="password-error">
+                            Παρακαλώ εισάγετε έναν κωδικό με 4-20 χαρακτήρες.
                         </div>
                     </div>
 
                     <!-- Email -->
-                    <div class="form-group form-floating text-start">
+                    <div class="form-group form-floating text-start mb-4">
                         <input class="form-control" id="email" name="email" type="email"
                             placeholder="Email" maxlength="100" required>
                         <label class="text-muted opacity-100" for="email">
@@ -81,7 +80,7 @@
                     </div>
 
                     <!-- Role -->
-                    <div class="form-group form-floating">
+                    <div class="form-group form-floating mb-4">
                         <select class="form-select" id="role" name="role" required>
                             <option value selected disabled>-- Επιλέξτε ρόλο --</option>
                             <option value="user">Χρήστης</option>
@@ -89,10 +88,11 @@
                             <option value="admin">Διαχειριστής</option>
                         </select>
                         <label class="text-muted opacity-100" for="role">Ρόλος</label>
+                        <div class="invalid-feedback text-start">Παρακαλώ επιλέξτε ρόλο.</div>
                     </div>
 
                     <button class="btn w-100 btn-primary"
-                        onclick="{fullNameValidate(), passwordValidate(), businessValidate()}">
+                        onclick="{fullNameValidate(), passwordValidate()}">
                         Ολοκλήρωση εγγραφής
                     </button>
                 </form>
@@ -115,11 +115,5 @@
         document.getElementById("password").checkValidity()
             ? document.getElementById("password-error").style.display = "none"
             : document.getElementById("password-error").style.display = "block";
-    }
-
-    function businessValidate() {
-        document.getElementById("business").checkValidity()
-            ? document.getElementById("business-error").style.display = "none"
-            : document.getElementById("business-error").style.display = "block";
     }
 </script>

@@ -4,8 +4,8 @@ import {
     index,
     login,
     register,
-    signupForm,
     signup,
+    create,
 } from "../controllers/users.js";
 import catchAsync from "../utils/catchAsync.js";
 // import { isLoggedIn, isOnline } from "../middleware.js";
@@ -18,7 +18,7 @@ router.route("/index").get(home);
 router.route("/index.php").get(index).post(catchAsync(login));
 router.route("/register").get(register);
 router.route("/signup").get(register);
-router.route("/signup.php").get(signupForm).post(catchAsync(signup));
+router.route("/signup.php").get(signup).post(catchAsync(create));
 
 // router
 //     .route("/register/complete")

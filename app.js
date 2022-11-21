@@ -61,6 +61,7 @@ app.use(async (req, res, next) => {
     if (req.session.user_id)
         req.user = await User.findById(req.session.user_id);
     else req.user = null;
+    // console.log(req.user);
     next();
 });
 
@@ -83,9 +84,9 @@ app.all("*", (req, res, next) =>
 
 // generic error message for errors that weren't handled elsewhere
 app.use((err, req, res, next) => {
-    const { statusCode = 500 } = err;
+    const { status = 500 } = err;
     if (!err.message) err.message = "Κάτι πήγε στραβά!";
-    res.status(statusCode).render("error", { err, title: "Σφάλμα" });
+    res.status(status).render("error", { err, title: "Σφάλμα" });
 });
 
 const port = process.env.PORT || 3000;

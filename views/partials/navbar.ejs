@@ -1,0 +1,143 @@
+<nav
+    class="navbar navbar-expand-lg navbar-dark bg-dark <% if (["Register", "Welcome", "Σύνδεση", "Reset Password", "Error"].includes(title)) { %> mb-n108 <% } else if (title.includes("Χρήστες") || title.includes("Επιχειρήσεις") || title.includes("Ρυθμίσεις") || title.includes("Χρεώσεις") || title.includes("Νέος Χρήστης") || title.includes("Νέα Επιχείρηση") || title.includes("Complete Registration")) { %> border-bottom border-white-10 border-bottom-lg-0 <% } else { %> navbar-reveal fixed-top <% } %>">
+    <div class="container-lg">
+
+        <!-- Brand -->
+        <a class="navbar-brand d-lg-none" href="/">
+            Cloud Project
+        </a>
+
+        <!-- Toggler -->
+        <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-content"
+            type="button" aria-controls="navbar-content" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Collapse -->
+        <div class="collapse navbar-collapse" id="navbar-content">
+
+            <!-- Navigation -->
+            <ul class="navbar-nav justify-content-end w-100">
+
+                <!-- App -->
+                <li class="nav-item">
+                    <a class="nav-link" <% if (user) { %> href="https://app.timologiopro.gr/"
+                        target="_blank" <% } else { %> data-bs-toggle="modal" href="#login-modal"
+                        <% } %>>
+                        Εφαρμογή
+                    </a>
+                </li>
+
+                <!-- About -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="pages-dropdown" href="#" role="button"
+                        aria-haspopup="true" aria-expanded="false">
+                        Σχετικά
+                    </a>
+                    <div class="dropdown-positioner">
+                        <div class="dropdown-menu dropdown-menu-md"
+                            aria-labelledby="pages-dropdown">
+
+                            <!-- Links -->
+                            <a class="dropdown-item" href="/about">
+                                Η Ιστορία Μας
+                            </a>
+                            <a class="dropdown-item" href="/pricing">
+                                Κοστολόγηση
+                            </a>
+                            <a class="dropdown-item" href="/compare">
+                                Πίνακας Κοστολόγησης
+                            </a>
+                            <a class="dropdown-item" href="/tos">
+                                Όροι Χρήσης
+                            </a>
+                            <a class="dropdown-item" href="/privacy">
+                                Πολιτική Απορρήτου
+                            </a>
+                            <a class="dropdown-item" href="/contact">
+                                Επικοινωνία
+                            </a>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+
+            <!-- Brand -->
+            <a class="navbar-brand d-none d-lg-block px-lg-6 me-lg-0" href="/">
+                Cloud Project
+            </a>
+
+            <!-- Navigation -->
+            <ul class="navbar-nav justify-content-start w-100">
+
+                <!-- Support -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="pages-dropdown" href="#" role="button"
+                        aria-haspopup="true" aria-expanded="false">
+                        Υποστήριξη
+                    </a>
+                    <div class="dropdown-positioner">
+                        <div class="dropdown-menu dropdown-menu-md"
+                            aria-labelledby="pages-dropdown">
+
+                            <!-- Links -->
+                            <a class="dropdown-item" href="/faq">
+                                Συχνές Ερωτήσεις
+                            </a>
+                            <a class="dropdown-item" href="/help">
+                                Κέντρο Υποστήριξης
+                            </a>
+                            <a class="dropdown-item" href="/help/article">
+                                Άρθρο
+                            </a>
+                            <a class="dropdown-item" href="/contact">
+                                Επικοινωνία
+                            </a>
+                        </div>
+                    </div>
+                </li>
+
+                <!-- Account -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="account-dropdown" href="/settings"
+                        role="button" aria-haspopup="true" aria-expanded="false">
+                        <%= user ? user.name : "Λογαριασμός" %>
+                    </a>
+                    <div class="dropdown-positioner">
+                        <div class="dropdown-menu dropdown-menu-md"
+                            aria-labelledby="account-dropdown">
+
+                            <% if (user) { %>
+                            <!-- Links -->
+                            <a class="dropdown-item" href="/settings">
+                                Ρυθμίσεις
+                            </a>
+                            <a class="dropdown-item" href="/billing">
+                                Χρεώσεις
+                            </a>
+                            <a class="dropdown-item" href="/businesses">
+                                Επιχειρήσεις
+                            </a>
+                            <a class="dropdown-item" href="/users">
+                                Χρήστες
+                            </a>
+                            <a class="dropdown-item" href="/logout">
+                                Αποσύνδεση
+                            </a>
+
+                            <% } else { %>
+                            <a class="dropdown-item" data-bs-toggle="modal" href="#login-modal">
+                                Σύνδεση
+                            </a>
+                            <a class="dropdown-item" data-bs-toggle="modal" href="#register-modal">
+                                Εγγραφή
+                            </a>
+                            <% } %>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

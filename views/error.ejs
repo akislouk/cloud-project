@@ -8,7 +8,7 @@
 
                 <!-- Pre-heading -->
                 <h6 class="text-uppercase text-warning mb-5">
-                    <%= err.statusCode %>
+                    <%= err.status %>
                 </h6>
 
                 <!-- Heading -->
@@ -17,7 +17,7 @@
                 </h1>
 
                 <!-- Text -->
-                <% if (err.statusCode === 404) { %>
+                <% if (err.status === 404) { %>
                 <p class="text-muted">
                     There’s nothing here, but if you feel this is an error, please <a
                         href="/contact">contact us</a>.
@@ -28,7 +28,7 @@
                 </p>
                 <% } %>
 
-                <% if (process.env.NODE_ENV !== "production" && err.statusCode !== 404) { %>
+                <% if (process.env.NODE_ENV !== "production" && err.status !== 404) { %>
                 <p>
                     <%= err.stack %>
                 </p>
