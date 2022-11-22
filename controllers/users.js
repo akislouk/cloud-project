@@ -2,15 +2,32 @@ import User from "../models/user.js";
 const { scrypt, webcrypto } = await import("node:crypto");
 
 export const home = (req, res) => res.redirect("/index.php");
-export const index = (req, res) => res.render("users", { title: "Σύνδεση" });
+export const index = (req, res) => {
+    if (req.session.user) res.redirect("/welcome.php");
+    else res.render("users", { title: "Αρχική" });
+};
 
+// Logs the user in if they gave the right credentials and if they are confirmed
 export const login = async (req, res) => {
     const { username, password } = req.body;
     const user = await User.findAndValidate(username, password);
-    if (user) {
-        req.session.user_id = user.id;
+    if (user && user.confirmed === 1) {
+        req.session.user = user.id;
+        req.flash(
+            "success",
+            `Καλώς ορίσατε πίσω στο Cloud Project, ${user.name}!`
+        );
         res.redirect("/welcome.php");
-    } else res.redirect("/index.php");
+    } else {
+        if (!user)
+            req.flash("error", "Λάθος στοιχεία. Παρακαλώ δοκιμάστε ξανά.");
+        else
+            req.flash(
+                "error",
+                "Δεν έχει γίνει ακόμα επιβεβαίωση του λογαριασμού σας. Παρακαλώ επικοινωνήστε με το διαχειριστή."
+            );
+        res.redirect("/index.php");
+    }
 };
 
 export const register = (req, res) => res.redirect("/signup.php");
@@ -38,7 +55,7 @@ export const create = async (req, res, next) => {
             })
         );
 
-        // using the User class constructor to create the new user
+        // Using the User class constructor to create the new user
         const user = new User({
             name,
             surname,
@@ -49,15 +66,25 @@ export const create = async (req, res, next) => {
             role,
         });
 
-        // saving the new user to the database
+        // Saving the new user to the database
         await user.save();
 
-        req.flash(
-            "success",
-            `Καλώς ήρθατε στο Cloud Project, ${user.username}!`
-        );
+        req.flash("success", `Καλώς ήρθατε στο Cloud Project, ${user.name}!`);
         res.redirect("/welcome.php");
     } catch (error) {
         next(error);
     }
+};
+
+// Logs the user out by removing their ID from the session cookie
+export const logout = (req, res, next) => {
+    req.session.user = null;
+    req.session.save(function (error) {
+        if (error) next(error);
+        req.session.regenerate(function (error) {
+            if (error) next(error);
+            req.flash("success", "Έχετε αποσυνδεθεί. Αντίο!");
+            res.redirect("/index.php");
+        });
+    });
 };

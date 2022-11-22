@@ -18,7 +18,6 @@ class User {
     // Saves a new user to the database
     save = async () =>
         new Promise((resolve, reject) => {
-            console.log(this);
             pool.query(
                 `\
                 INSERT INTO user (name, surname, username, salt, hash, email, role)

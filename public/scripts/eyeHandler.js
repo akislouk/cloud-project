@@ -12,3 +12,9 @@ document
             eye.classList.replace("bi-eye", "bi-eye-slash");
         else eye.classList.replace("bi-eye-slash", "bi-eye");
     });
+
+function passwordValidate() {
+    document.getElementById("password").checkValidity()
+        ? (document.getElementById("password-error").style.display = "none")
+        : (document.getElementById("password-error").style.display = "block");
+}

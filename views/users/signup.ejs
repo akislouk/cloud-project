@@ -1,102 +1,100 @@
 <% layout('layouts/boilerplate') %>
 <%#- include("../partials/modals") %>
 
-<main class="py-6 py-md-11">
-    <div class="container-lg d-flex flex-column">
-        <div class="row align-items-center justify-content-center">
-            <div class="col-12 col-md-8 col-lg-7 col-xl-6 text-center">
-                <h1 class="display-3 mb-4">
+<main class="container-lg d-flex flex-column">
+    <div class="row align-items-center justify-content-center min-vh-100 pt-108 mt-n1">
+        <div class="col-12 col-md-7 col-lg-5 text-center">
+            <h1 class="display-3 mb-4">
+                Εγγραφή
+            </h1>
+            <p class="text-muted">
+                Έχετε ήδη λογαριασμό; <a href="/index.php">Συνδεθείτε!</a>
+            </p>
+
+            <form class="validate-form" action="/signup.php" method="post" novalidate>
+
+                <!-- Name -->
+                <div class="input-group mb-4">
+                    <div class="form-group form-floating text-start mb-0">
+                        <input class="form-control" id="name" name="name" type="text"
+                            placeholder="Όνομα" pattern="[\p{L} ,.'’-]{0,50}$" required
+                            oninput="fullNameValidate()">
+                        <label class="text-muted opacity-100" for="name">
+                            Όνομα
+                        </label>
+                    </div>
+                    <div class="form-group form-floating text-start mb-0">
+                        <input class="form-control" id="surname" name="surname" type="text"
+                            placeholder="Επώνυμο" pattern="[\p{L} ,.'’-]{0,50}$" required
+                            oninput="fullNameValidate()">
+                        <label class="text-muted opacity-100" for="surname">
+                            Επώνυμο
+                        </label>
+                    </div>
+                    <div class="invalid-feedback text-start" id="name-error">
+                        Παρακαλώ εισάγετε ένα έγκυρο ονοματεπώνυμο.
+                    </div>
+                </div>
+
+                <!-- Username -->
+                <div class="form-group form-floating text-start mb-4">
+                    <input class="form-control" id="username" name="username" type="text"
+                        placeholder="Όνομα χρήστη" maxlength="100" required>
+                    <label class="text-muted opacity-100" for="username">
+                        Όνομα χρήστη
+                    </label>
+                    <div class="invalid-feedback">
+                        Παρακαλώ εισάγετε ένα έγκυρο όνομα χρήστη.
+                    </div>
+                </div>
+
+                <!-- Password -->
+                <div class="input-group mb-4">
+                    <div class="form-floating text-start">
+                        <input class="form-control" id="password" name="password"
+                            placeholder="Κωδικός" type="password" minlength="4" maxlength="20"
+                            required aria-label="Κωδικός" aria-describedby="password-caption"
+                            aria-required="true" oninput="passwordValidate()">
+                        <label class="text-muted opacity-100" for="password">
+                            Κωδικός
+                        </label>
+                    </div>
+                    <a class="input-group-text text-decoration-none text-gray-500"
+                        id="password-caption" href="#password">
+                        <i class="bi bi-eye"></i>
+                    </a>
+                    <div class="invalid-feedback text-start" id="password-error">
+                        Παρακαλώ εισάγετε έναν κωδικό με 4-20 χαρακτήρες.
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="form-group form-floating text-start mb-4">
+                    <input class="form-control" id="email" name="email" type="email"
+                        placeholder="Email" maxlength="100" required>
+                    <label class="text-muted opacity-100" for="email">
+                        Email
+                    </label>
+                    <div class="invalid-feedback">Παρακαλώ εισάγετε ένα έγκυρο email.</div>
+                </div>
+
+                <!-- Role -->
+                <div class="form-group form-floating mb-4">
+                    <select class="form-select" id="role" name="role" required>
+                        <option value selected disabled>-- Επιλέξτε ρόλο --</option>
+                        <option value="user">Χρήστης</option>
+                        <option value="seller">Πωλητής</option>
+                        <option value="admin">Διαχειριστής</option>
+                    </select>
+                    <label class="text-muted opacity-100" for="role">Ρόλος</label>
+                    <div class="invalid-feedback text-start">Παρακαλώ επιλέξτε ρόλο.</div>
+                </div>
+
+                <button class="btn w-100 btn-primary"
+                    onclick="{fullNameValidate(), passwordValidate()}">
                     Εγγραφή
-                </h1>
-                <p class="text-muted">
-                    Εισάγετε τα στοιχεία σας παρακάτω για να ολοκληρώσετε τη διαδικασία εγγραφής.
-                </p>
-
-                <form class="validate-form" action="/signup.php" method="post" novalidate>
-
-                    <!-- Name -->
-                    <div class="input-group mb-4">
-                        <div class="form-group form-floating text-start mb-0">
-                            <input class="form-control" id="name" name="name" type="text"
-                                placeholder="Όνομα" pattern="[\p{L} ,.'’-]{0,50}$" required
-                                oninput="fullNameValidate()">
-                            <label class="text-muted opacity-100" for="name">
-                                Όνομα
-                            </label>
-                        </div>
-                        <div class="form-group form-floating text-start mb-0">
-                            <input class="form-control" id="surname" name="surname" type="text"
-                                placeholder="Επώνυμο" pattern="[\p{L} ,.'’-]{0,50}$" required
-                                oninput="fullNameValidate()">
-                            <label class="text-muted opacity-100" for="surname">
-                                Επώνυμο
-                            </label>
-                        </div>
-                        <div class="invalid-feedback text-start" id="name-error">
-                            Παρακαλώ εισάγετε ένα έγκυρο ονοματεπώνυμο.
-                        </div>
-                    </div>
-
-                    <!-- Username -->
-                    <div class="form-group form-floating text-start mb-4">
-                        <input class="form-control" id="username" name="username" type="text"
-                            placeholder="Όνομα χρήστη" maxlength="100" required>
-                        <label class="text-muted opacity-100" for="username">
-                            Όνομα χρήστη
-                        </label>
-                        <div class="invalid-feedback">
-                            Παρακαλώ εισάγετε ένα έγκυρο όνομα χρήστη.
-                        </div>
-                    </div>
-
-                    <!-- Password -->
-                    <div class="input-group mb-4">
-                        <div class="form-floating text-start">
-                            <input class="form-control" id="password" name="password"
-                                placeholder="Κωδικός" type="password" minlength="4" maxlength="20"
-                                required aria-label="Κωδικός" aria-describedby="password-caption"
-                                oninput="passwordValidate()">
-                            <label class="text-muted opacity-100" for="password">
-                                Κωδικός
-                            </label>
-                        </div>
-                        <a class="input-group-text text-decoration-none text-gray-500"
-                            id="password-caption" href="#password">
-                            <i class="bi bi-eye"></i>
-                        </a>
-                        <div class="invalid-feedback text-start" id="password-error">
-                            Παρακαλώ εισάγετε έναν κωδικό με 4-20 χαρακτήρες.
-                        </div>
-                    </div>
-
-                    <!-- Email -->
-                    <div class="form-group form-floating text-start mb-4">
-                        <input class="form-control" id="email" name="email" type="email"
-                            placeholder="Email" maxlength="100" required>
-                        <label class="text-muted opacity-100" for="email">
-                            Email
-                        </label>
-                        <div class="invalid-feedback">Παρακαλώ εισάγετε ένα έγκυρο email.</div>
-                    </div>
-
-                    <!-- Role -->
-                    <div class="form-group form-floating mb-4">
-                        <select class="form-select" id="role" name="role" required>
-                            <option value selected disabled>-- Επιλέξτε ρόλο --</option>
-                            <option value="user">Χρήστης</option>
-                            <option value="seller">Πωλητής</option>
-                            <option value="admin">Διαχειριστής</option>
-                        </select>
-                        <label class="text-muted opacity-100" for="role">Ρόλος</label>
-                        <div class="invalid-feedback text-start">Παρακαλώ επιλέξτε ρόλο.</div>
-                    </div>
-
-                    <button class="btn w-100 btn-primary"
-                        onclick="{fullNameValidate(), passwordValidate()}">
-                        Ολοκλήρωση εγγραφής
-                    </button>
-                </form>
-            </div>
+                </button>
+            </form>
         </div>
     </div>
 </main>
@@ -109,11 +107,5 @@
             document.getElementById("name-error").style.display = "block";
         else
             document.getElementById("name-error").style.display = "none";
-    }
-
-    function passwordValidate() {
-        document.getElementById("password").checkValidity()
-            ? document.getElementById("password-error").style.display = "none"
-            : document.getElementById("password-error").style.display = "block";
     }
 </script>

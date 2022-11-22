@@ -58,10 +58,8 @@ app.use(flash());
 
 // setting the current user to the request object
 app.use(async (req, res, next) => {
-    if (req.session.user_id)
-        req.user = await User.findById(req.session.user_id);
+    if (req.session.user) req.user = await User.findById(req.session.user);
     else req.user = null;
-    // console.log(req.user);
     next();
 });
 

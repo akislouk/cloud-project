@@ -1,68 +1,53 @@
 <% layout('layouts/boilerplate') %>
-
-<!-- MODALS -->
 <%#- include("../partials/modals") %>
 
-<!-- BODY -->
-<main>
-    <div class="container-lg d-flex flex-column">
-        <div class="row align-items-center justify-content-center min-vh-100 pt-108 mt-n1">
-            <div class="col-12 col-md-7 col-lg-5 text-center">
+<main class="container-lg d-flex flex-column">
+    <div class="row align-items-center justify-content-center min-vh-100 pt-108 mt-n1">
+        <div class="col-12 col-md-7 col-lg-5 text-center">
+            <h1 class="display-3 mb-4">
+                Σύνδεση
+            </h1>
+            <p class="text-muted">
+                Δεν έχετε λογαριασμό; <a href="/signup.php">Εγγραφείτε τώρα!</a>
+            </p>
 
-                <!-- Heading -->
-                <h1 class="display-3 mb-4">
-                    Σύνδεση
-                </h1>
+            <form class="validate-form" action="/index.php" method="post" novalidate>
 
-                <!-- Text -->
-                <p class="text-muted">
-                    Δεν έχετε λογαριασμό; <a href="/register">Εγγραφείτε τώρα!</a>
-                </p>
+                <!-- Username -->
+                <div class="form-group form-floating text-start mb-4">
+                    <input class="form-control" id="username" name="username" type="text"
+                        placeholder="Το όνομα χρήστη σας" maxlength="100" required
+                        aria-required="true">
+                    <label class="text-muted opacity-100" for="username">
+                        Το όνομα χρήστη σας
+                    </label>
+                    <div class="invalid-feedback">Παρακαλώ εισάγετε όνομα χρήστη.</div>
+                </div>
 
-                <!-- Form -->
-                <form class="validate-form mb-6" action="/index.php" method="post" novalidate>
-
-                    <!-- Username -->
-                    <div class="form-group form-floating text-start">
-                        <input class="form-control" id="username" name="username" type="text"
-                            placeholder="Το email σας" maxlength="100" required
+                <!-- Password -->
+                <div class="input-group mb-4">
+                    <div class="form-floating text-start">
+                        <input class="form-control" id="password" name="password"
+                            placeholder="Ο κωδικός σας" type="password" required
+                            aria-label="Ο κωδικός σας" aria-describedby="password-caption"
                             aria-required="true">
-                        <label class="text-muted opacity-100" for="username">
-                            Το email σας
+                        <label class="text-muted opacity-100" for="password">
+                            Ο κωδικός σας
                         </label>
-                        <div class="invalid-feedback">Παρακαλώ εισάγετε ένα έγκυρο email.</div>
                     </div>
-
-                    <!-- Password -->
-                    <div class="form-group">
-                        <div class="input-group">
-                            <div class="form-floating text-start">
-                                <input class="form-control" id="password" name="password"
-                                    placeholder="Ο κωδικός σας" type="password" required
-                                    aria-label="Ο κωδικός σας" aria-required="true">
-                                <label class="text-muted opacity-100" for="password">
-                                    Ο κωδικός σας
-                                </label>
-                            </div>
-                            <a class="input-group-text text-decoration-none text-gray-500"
-                                data-toggle="password" href="#password"
-                                onclick="eyeHandler(this.children[0])">
-                                <i class="fe fe-eye"></i>
-                            </a>
-                        </div>
+                    <a class="input-group-text text-decoration-none text-gray-500"
+                        id="password-caption" href="#password">
+                        <i class="bi bi-eye"></i>
+                    </a>
+                    <div class="invalid-feedback text-start" id="password-error">
+                        Παρακαλώ εισάγετε κωδικό.
                     </div>
+                </div>
 
-                    <!-- Button -->
-                    <button class="btn w-100 btn-primary">
-                        Είσοδος
-                    </button>
-                </form>
-
-                <!-- Link -->
-                <a class="fs-sm" href="/reset-password">
-                    Ξεχάσατε τον κωδικό σας;
-                </a>
-            </div>
+                <button class="btn w-100 btn-primary" onclick="passwordValidate()">
+                    Σύνδεση
+                </button>
+            </form>
         </div>
     </div>
 </main>
