@@ -4,7 +4,7 @@ const { scrypt, webcrypto } = await import("node:crypto");
 export const home = (req, res) => res.redirect("/index.php");
 export const index = (req, res) => {
     if (req.session.user) res.redirect("/welcome.php");
-    else res.render("users", { title: "Αρχική" });
+    else res.render("users", { title: "Σύνδεση" });
 };
 
 // Logs the user in if they gave the right credentials and if they are confirmed
@@ -17,7 +17,7 @@ export const login = async (req, res) => {
             "success",
             `Καλώς ορίσατε πίσω στο Cloud Project, ${user.name}!`
         );
-        res.redirect("/welcome.php");
+        res.redirect(req.session.returnTo || "/welcome.php");
     } else {
         if (!user)
             req.flash("error", "Λάθος στοιχεία. Παρακαλώ δοκιμάστε ξανά.");
@@ -75,6 +75,9 @@ export const create = async (req, res, next) => {
         next(error);
     }
 };
+
+export const welcome = (req, res) =>
+    res.render("users/welcome", { title: "Αρχική" });
 
 // Logs the user out by removing their ID from the session cookie
 export const logout = (req, res, next) => {
