@@ -89,7 +89,7 @@ export function init() {
     connection.query(
         `\
         INSERT INTO user (name, surname, username, salt, hash, email, role, confirmed)
-        SELECT 'Admin', 'Admin', 'admin', '${process.env.ADMIN_SALT}', UNHEX('${process.env.ADMIN_HASH}'), 'admin@tuc.gr', 'admin', 1;`,
+        SELECT 'Σπύρος', 'Λουκάτος', 'admin', '${process.env.ADMIN_SALT}', UNHEX('${process.env.ADMIN_HASH}'), 'admin@tuc.gr', 'admin', 1;`,
         (error) => {
             if (error) console.log(error.sqlMessage);
             console.log("Admin validated");
