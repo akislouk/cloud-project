@@ -1,5 +1,5 @@
 <nav
-    class="navbar navbar-expand-lg navbar-dark bg-dark <% if (["Εγγραφή", "Αρχική", "Σύνδεση", "Σφάλμα"].includes(title)) { %> mb-n56 <% } else { %> navbar-reveal fixed-top <% } %>">
+    class="navbar navbar-expand-lg navbar-dark <% if (!(["Εγγραφή", "Αρχική", "Σύνδεση"].includes(title))) { %>bg-dark <% } if (["Εγγραφή", "Αρχική", "Σύνδεση", "Σφάλμα"].includes(title)) { %>mb-n56<% } else { %>navbar-reveal fixed-top<% } %>">
     <div class="container-fluid mx-0">
         <a class="navbar-brand" href="/index.php">
             Cloud Project

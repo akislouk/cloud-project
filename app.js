@@ -13,6 +13,7 @@ import ExpressError from "./utils/ExpressError.js";
 import { init } from "./models/db.js";
 import User from "./models/user.js";
 import usersRoutes from "./routes/users.js";
+import sellersRoutes from "./routes/sellers.js";
 
 // initializing the database
 init();
@@ -74,6 +75,7 @@ app.use((req, res, next) => {
 
 // using my routes
 app.use("/", usersRoutes);
+app.use("/", sellersRoutes);
 
 // sending a 404 error if the user tries to access a route that doesn't exist
 app.all("*", (req, res, next) =>

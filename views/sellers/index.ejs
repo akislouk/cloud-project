@@ -1,0 +1,81 @@
+<% layout("layouts/boilerplate") %>
+
+<header class="container-lg py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-9 col-xl-7 text-center">
+            <h1 class="display-2 mb-4">
+                Πύλη Πωλητών
+            </h1>
+            <p class="lead text-muted mb-4">
+                Εδώ μπορείτε να δείτε και να διαχειριστείτε όλα τα προϊόντα που έχετε
+                καταχωρήσει στην υπηρεσία μας ή να προσθέσετε νέα προϊόντα.
+            </p>
+            <a class="btn btn-lg btn-primary" role="button" title="Προσθήκη νέου προϊόντος"
+                href="/seller/new">
+                Νέο προϊόν <i class="bi bi-cloud-plus-fill ms-1"></i>
+            </a>
+        </div>
+    </div>
+</header>
+
+<hr class="hr-sm border border-3 border-warning mx-auto">
+
+<div class="container-lg py-5">
+    <div class="row justify-content-center">
+        <main class="col-xl-10">
+            <h2 class="display-5 text-center mb-4">
+                Τα Προϊόντα Σας
+            </h2>
+
+            <div class="row">
+                <% if (products.length > 0) { %>
+                <% let i = 0; for (const product of products) { i++;%>
+                <div class="col-12 col-sm-6 col-md-4 my-4">
+                    <div class="card">
+                        <a href="/seller/<%= product.id %>">
+                            <img class="card-img-top img-fluid" <% if (i % 3 === 0) { %>
+                                src="https://source.unsplash.com/collection/44204348/548x360"
+                                <% } else if (i % 2 === 0) { %>
+                                src="https://source.unsplash.com/collection/8788025/548x360"
+                                <% } else { %>
+                                src="https://source.unsplash.com/collection/4474589/548x360" <% } %>
+                                alt="Εικόνα προϊόντος">
+                        </a>
+
+                        <div class="card-body p-0">
+                            <h4 class="card-title text-truncate mb-0 pt-2 px-3">
+                                <%= product.name %>
+                            </h4>
+                            <p class="card-text text-truncate mb-1 px-3">
+                                <small class="text-muted">
+                                    <%= product.date_of_withdrawal %> <%= product.product_code %>
+                                </small>
+                            </p>
+                            <h5 class="card-subtitle display-6 text-truncate mt-1 pb-2 px-3">
+                                <%= product.price %><i class="bi bi-currency-euro"></i>
+                            </h5>
+                            <div class="px-3 pb-2">
+                                <a class="btn btn-primary w-100 mb-2 py-2"
+                                    href="/seller/<%= product.id %>">
+                                    Edit
+                                </a>
+                                <form action="/seller/<%= product.id %>?_method=delete"
+                                    method="POST">
+                                    <button class="btn btn-danger w-100 py-2">Delete</button>
+                                </form>
+                            </div>
+                            <div class="card-footer text-center text-truncate">
+                                <%= product.category %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <% }} else { %>
+                <p class="text-muted text-center">
+                    Δεν έχετε προσθέσει ακόμα κανένα προϊόν.
+                </p>
+                <% } %>
+            </div>
+        </main>
+    </div>
+</div>

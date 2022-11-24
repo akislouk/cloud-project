@@ -34,7 +34,7 @@ export const register = (req, res) => res.redirect("/signup.php");
 export const signup = (req, res) =>
     res.render("users/signup", { title: "Εγγραφή" });
 
-// Creates the new user and saves him to the database
+// Creates the new user and saves them to the database
 export const create = async (req, res, next) => {
     try {
         // Deconstructing the request body

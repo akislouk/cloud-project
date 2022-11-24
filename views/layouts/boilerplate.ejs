@@ -31,7 +31,8 @@
         <title>Cloud Project</title>
     </head>
 
-    <body <% if (["Σύνδεση", "Εγγραφή", "Αρχική"].includes(title)) { %> class="bg-img" <% } %>>
+    <body <% if (["Σύνδεση", "Εγγραφή", "Αρχική"].includes(title)) { %> class="bg-img"
+        <% } else if (title !== "Σφάλμα") { %> class="pt-56" <% } %>>
         <%- include("../partials/navbar") %>
         <%- include("../partials/flash") %>
         <%- body %>

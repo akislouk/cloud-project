@@ -41,7 +41,7 @@ class User {
         new Promise((resolve, reject) => {
             pool.query(
                 `\
-                SELECT id, name, surname, email, role, confirmed
+                SELECT id, name, surname, username, email, role, confirmed
                 FROM user WHERE id = ${pool.escape(id)}`,
                 (error, results, fields) => {
                     if (error) return reject(error);

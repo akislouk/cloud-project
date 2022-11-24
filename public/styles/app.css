@@ -5,6 +5,10 @@ body.bg-img {
     background-position: center;
 }
 
+.hr-sm {
+    width: 100px;
+}
+
 .opacity-86 {
     opacity: 0.86;
 }
