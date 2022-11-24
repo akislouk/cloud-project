@@ -12,20 +12,20 @@
             </h1>
 
             <% if (err.status === 404) { %>
-            <p class="text-muted">
+            <p class="text-muted mb-4">
                 Δεν υπάρχει τίποτα εδώ. Αν πιστεύετε πως υπάρχει κάποιο λάθος, παρακαλώ
                 επικοινωνήστε με το διαχειριστή.
             </p>
             <% } else { %>
-            <p class="text-muted">
+            <p class="text-muted mb-4">
                 <%= err.message %>
             </p>
             <% } %>
 
             <%# Showing the full error in development %>
-            <% if (process.env.NODE_ENV !== "production" && err.status !== 404) { %>
-            <p>
-                <%= err.stack %>
+            <% if (process.env.NODE_ENV !== "production" && err.status !== 404 && err.status !== 403) { %>
+            <p class="text-muted mb-4">
+                <%- err.stack.replaceAll("\n", "<br>") %>
             </p>
             <% } %>
 

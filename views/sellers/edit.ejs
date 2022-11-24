@@ -5,21 +5,24 @@
         <main class="col-sm-10 col-md-7 col-lg-6">
             <header class="text-center pb-5">
                 <h1 class="display-2 mb-4">
-                    Νέο Προϊόν
+                    Επεξεργασία Προϊόντος
                 </h1>
                 <p class="lead text-muted mb-0">
-                    Εισάγετε τα στοιχεία του προϊόντος παρακάτω.
+                    Επεξεργαστείτε τα στοιχεία του προϊόντος σας παρακάτω.
                 </p>
             </header>
 
-            <form class="validate-form" action="/seller/new" method="post" novalidate>
+            <form class="d-none" id="delete-form" action="/seller/<%= product.id %>?_method=delete"
+                method="post"></form>
+
+            <form class="validate-form" action="/seller/<%= product.id %>?_method=put" method="post"
+                novalidate>
                 <div class="form-group mb-4">
                     <label class="form-label" for="name">
                         Όνομα
                     </label>
                     <input class="form-control" id="name" name="name" type="text"
-                        placeholder="Το όνομα του προϊόντος" required pattern="[\S ]{0,100}"
-                        aria-required="true">
+                        placeholder="<%= product.name %>" pattern="[\S ]{0,100}">
                     <div class="invalid-feedback">
                         Παρακαλώ εισάγετε ένα έγκυρο όνομα μέχρι 100 χαρακτήρες.
                     </div>
@@ -30,8 +33,7 @@
                         Κωδικός
                     </label>
                     <input class="form-control" id="product-code" name="product_code" type="text"
-                        placeholder="Ο κωδικός προϊόντος" required pattern="[\S ]{0,50}"
-                        aria-required="true">
+                        placeholder="<%= product.product_code %>" pattern="[\S ]{0,50}">
                     <div class="invalid-feedback">
                         Παρακαλώ εισάγετε έναν έγκυρο κωδικό μέχρι 50 χαρακτήρες.
                     </div>
@@ -44,8 +46,7 @@
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-currency-euro"></i></span>
                         <input class="form-control" id="price" name="price" type="text"
-                            placeholder="Η τιμή του προϊόντος" required
-                            pattern="\d{0,6}(?:[,.]\d{1,2}|$)" aria-required="true">
+                            placeholder="<%= product.price %>" pattern="\d{0,6}(?:[,.]\d{1,2}|$)">
                         <div class="invalid-feedback">
                             Παρακαλώ εισάγετε μια έγκυρη τιμή μέχρι 999999,99 €.
                         </div>
@@ -57,19 +58,21 @@
                         Κατηγορία
                     </label>
                     <input class="form-control" id="category" name="category" type="text"
-                        placeholder="Η κατηγορία προϊόντος" required pattern="[\S ]{0,50}"
-                        aria-required="true">
+                        placeholder="<%= product.category %>" pattern="[\S ]{0,50}">
                     <div class="invalid-feedback">
                         Παρακαλώ εισάγετε μια έγκυρη κατηγορία μέχρι 50 χαρακτήρες.
                     </div>
                 </div>
 
                 <div class="col-md-auto d-flex justify-content-evenly mt-4">
-                    <a class="btn btn-lg btn-danger" href="/seller.php">
+                    <a class="btn btn-lg btn-secondary" href="/seller.php">
                         Ακύρωση
                     </a>
+                    <button class="btn btn-lg btn-danger" form="delete-form">
+                        Διαγραφή
+                    </button>
                     <button class="btn btn-lg btn-success">
-                        Προσθήκη
+                        Ενημέρωση
                     </button>
                 </div>
             </form>

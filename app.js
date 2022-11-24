@@ -15,22 +15,26 @@ import User from "./models/user.js";
 import usersRoutes from "./routes/users.js";
 import sellersRoutes from "./routes/sellers.js";
 
-// initializing the database
+// Initializing the database. In a real app this would be replaced by
+// a simple query to test the connection to the database
 init();
 
 const app = express();
+
+// Getting the root folder in file URL format
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+// Setting EJS as the template engine and setting the views folder
 app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
 app.set("views", join(__dirname, "views"));
 
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(join(__dirname, "public")));
-app.use(methodOverride("_method"));
+app.use(express.static(join(__dirname, "public"))); // Setting the static content folder
+app.use(methodOverride("_method")); // Setting the parameter that will be used to override request methods
 
-// setting up session database
+// Setting up the session database
 const store = new (MySQLStore(session))({
     host: process.env.DB_HOST || "localhost",
     port: process.env.DB_PORT || 3306,
@@ -40,7 +44,7 @@ const store = new (MySQLStore(session))({
 });
 store.on("error", (error) => console.log("Store error ", error));
 
-// setting up session cookie
+// Setting up the session cookie
 const secret = process.env.SECRET || "ProjectSecret";
 const sessionConfig = {
     store,
@@ -55,16 +59,18 @@ const sessionConfig = {
     },
 };
 app.use(session(sessionConfig));
+
+// Using flash messages. Flash messages are added to the session cookie
 app.use(flash());
 
-// setting the current user to the request object
+// Saving the current user to the request object
 app.use(async (req, res, next) => {
     if (req.session.user) req.user = await User.findById(req.session.user);
     else req.user = null;
     next();
 });
 
-// passing stuff to the frontend
+// Passing some stuff to the frontend
 app.use((req, res, next) => {
     res.locals.user = req.user;
     res.locals.query = req.query;
@@ -73,16 +79,16 @@ app.use((req, res, next) => {
     next();
 });
 
-// using my routes
+// Using my routes
 app.use("/", usersRoutes);
 app.use("/", sellersRoutes);
 
-// sending a 404 error if the user tries to access a route that doesn't exist
+// Sending a 404 error if the user tries to access a route that doesn't exist
 app.all("*", (req, res, next) =>
     next(new ExpressError("Η σελίδα δεν βρέθηκε", 404))
 );
 
-// generic error message for errors that weren't handled elsewhere
+// Sending a generic error message for errors that weren't handled elsewhere
 app.use((err, req, res, next) => {
     const { status = 500 } = err;
     if (!err.message) err.message = "Κάτι πήγε στραβά!";

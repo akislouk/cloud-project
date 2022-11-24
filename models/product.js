@@ -12,18 +12,18 @@ class Product {
         this.category = product.category;
     }
 
-    // Saves a new product to the database
+    // Saves a product to the database
     save = async () =>
         new Promise((resolve, reject) => {
             pool.query(
                 `\
-                INSERT INTO product (name, product_code, price, seller_name, category)
-                SELECT
-                    ${pool.escape(this.name)},
-                    ${pool.escape(this.product_code)},
-                    '${this.price}',
-                    '${this.seller_name}',
-                    ${pool.escape(this.category)};`,
+                INSERT INTO product SET ? AS new
+                    ON DUPLICATE KEY UPDATE
+                        name = new.name,
+                        product_code = new.product_code,
+                        price = new.price,
+                        category = new.category;`,
+                this,
                 (error, results, fields) => {
                     if (error) return reject(error);
                     resolve(results[0]);
@@ -38,7 +38,7 @@ class Product {
                 `SELECT * FROM product WHERE id = ${pool.escape(id)}`,
                 (error, results, fields) => {
                     if (error) return reject(error);
-                    resolve(results[0]);
+                    resolve(new Product(results[0]));
                 }
             );
         });
@@ -47,7 +47,19 @@ class Product {
     static findByUsername = async (username) =>
         new Promise((resolve, reject) => {
             pool.query(
-                `SELECT * FROM product WHERE seller_name = '${username}'`,
+                `SELECT * FROM product WHERE seller_name = '${username}';`,
+                (error, results, fields) => {
+                    if (error) return reject(error);
+                    resolve(results);
+                }
+            );
+        });
+
+    // Deletes a product using its id
+    static remove = async (id) =>
+        new Promise((resolve, reject) => {
+            pool.query(
+                `DELETE FROM product WHERE id = ${id};`,
                 (error, results, fields) => {
                     if (error) return reject(error);
                     resolve(results);
