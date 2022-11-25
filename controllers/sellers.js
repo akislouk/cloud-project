@@ -1,18 +1,22 @@
 import Product from "../models/product.js";
 
 export const seller = (req, res) => res.redirect("/seller.php");
-export const index = async (req, res) => {
-    // Finding the seller's products
-    res.locals.products = await Product.findByUsername(req.user.username);
+export const index = async (req, res, error) => {
+    try {
+        // Finding the seller's products
+        res.locals.products = await Product.findByUsername(req.user.username);
 
-    // Turning the prices to Greek price format
-    res.locals.products.forEach((product) => {
-        product.price = new Intl.NumberFormat("el-GR", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-        }).format(product.price);
-    });
-    res.render("sellers", { title: "Πύλη Πωλητών" });
+        // Turning the prices to the Greek price format
+        res.locals.products.forEach((product) => {
+            product.price = new Intl.NumberFormat("el-GR", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+            }).format(product.price);
+        });
+        res.render("sellers", { title: "Πύλη Πωλητών" });
+    } catch (error) {
+        next(error);
+    }
 };
 
 export const newForm = (req, res) =>

@@ -8,25 +8,30 @@ export const index = (req, res) => {
 };
 
 // Logs the user in if they gave the right credentials and if they are confirmed
-export const login = async (req, res) => {
-    const { username, password } = req.body;
-    const user = await User.findAndValidate(username, password);
-    if (user && user.confirmed === 1) {
-        req.session.user = user.id;
-        req.flash(
-            "success",
-            `Καλώς ορίσατε πίσω στο Cloud Project, ${user.name}!`
-        );
-        res.redirect(req.session.returnTo || "/welcome.php");
-    } else {
-        if (!user)
-            req.flash("error", "Λάθος στοιχεία. Παρακαλώ δοκιμάστε ξανά.");
-        else
+export const login = async (req, res, next) => {
+    try {
+        const { username, password } = req.body;
+        const user = await User.findAndValidate(username, password);
+
+        if (user && user.confirmed === 1) {
+            req.session.user = user.id;
             req.flash(
-                "error",
-                "Δεν έχει γίνει ακόμα επιβεβαίωση του λογαριασμού σας. Παρακαλώ επικοινωνήστε με το διαχειριστή."
+                "success",
+                `Καλώς ορίσατε πίσω στο Cloud Project, ${user.name}!`
             );
-        res.redirect("/index.php");
+            res.redirect(req.session.returnTo || "/welcome.php");
+        } else {
+            if (!user)
+                req.flash("error", "Λάθος στοιχεία. Παρακαλώ δοκιμάστε ξανά.");
+            else
+                req.flash(
+                    "error",
+                    "Δεν έχει γίνει ακόμα επιβεβαίωση του λογαριασμού σας. Παρακαλώ επικοινωνήστε με το διαχειριστή."
+                );
+            res.redirect("/index.php");
+        }
+    } catch (error) {
+        next(error);
     }
 };
 

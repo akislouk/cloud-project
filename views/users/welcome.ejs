@@ -14,6 +14,15 @@
                 </p>
 
                 <div class="list-group list-group-flush mb-3">
+                    <a class="list-group-item list-group-item-action text-start"
+                        href="/products.php" title="products.php">
+                        <h2 class="fs-lg fw-bold mb-0">
+                            Κεντρική
+                        </h2>
+                        <p class="small text-muted mt-n1 mb-0">
+                            Προβολή όλων των διαθέσιμων προϊόντων του καταστήματός μας.
+                        </p>
+                    </a>
                     <a class="list-group-item list-group-item-action text-start" href="/cart.php"
                         title="cart.php">
                         <h2 class="fs-lg fw-bold mb-0">
@@ -21,15 +30,6 @@
                         </h2>
                         <p class="small text-muted mt-n1 mb-0">
                             Προβολή των προϊόντων που έχετε προσθέσει στο καλάθι σας.
-                        </p>
-                    </a>
-                    <a class="list-group-item list-group-item-action text-start"
-                        href="/products.php" title="products.php">
-                        <h2 class="fs-lg fw-bold mb-0">
-                            Προϊόντα
-                        </h2>
-                        <p class="small text-muted mt-n1 mb-0">
-                            Προβολή όλων των προϊόντων
                         </p>
                     </a>
                     <% if (user.role === "product seller" || user.role === "admin") { %>

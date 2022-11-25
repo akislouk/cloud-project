@@ -13,6 +13,7 @@ import ExpressError from "./utils/ExpressError.js";
 import { init } from "./models/db.js";
 import User from "./models/user.js";
 import usersRoutes from "./routes/users.js";
+import buyersRoutes from "./routes/buyers.js";
 import sellersRoutes from "./routes/sellers.js";
 
 // Initializing the database. In a real app this would be replaced by
@@ -81,6 +82,7 @@ app.use((req, res, next) => {
 
 // Using my routes
 app.use("/", usersRoutes);
+app.use("/", buyersRoutes);
 app.use("/", sellersRoutes);
 
 // Sending a 404 error if the user tries to access a route that doesn't exist

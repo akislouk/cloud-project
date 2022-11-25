@@ -21,8 +21,8 @@
                 <div class="dropdown-positioner">
                     <div class="dropdown-menu dropdown-menu-dark">
                         <% if (user) { %>
+                        <a class="dropdown-item" href="/products.php">Κεντρική</a>
                         <a class="dropdown-item" href="/cart.php">Καλάθι Αγορών</a>
-                        <a class="dropdown-item" href="/products.php">Προϊόντα</a>
                         <% if (user.role === "product seller" || user.role === "admin") { %>
                         <a class="dropdown-item" href="/seller.php">Πύλη Πωλητών</a>
                         <% } %>

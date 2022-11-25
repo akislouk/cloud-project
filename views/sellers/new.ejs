@@ -18,7 +18,7 @@
                         Όνομα
                     </label>
                     <input class="form-control" id="name" name="name" type="text"
-                        placeholder="Το όνομα του προϊόντος" required pattern="[\S ]{0,100}"
+                        placeholder="Το όνομα του προϊόντος" pattern="[\S ]{0,100}" required
                         aria-required="true">
                     <div class="invalid-feedback">
                         Παρακαλώ εισάγετε ένα έγκυρο όνομα μέχρι 100 χαρακτήρες.
@@ -30,7 +30,7 @@
                         Κωδικός
                     </label>
                     <input class="form-control" id="product-code" name="product_code" type="text"
-                        placeholder="Ο κωδικός προϊόντος" required pattern="[\S ]{0,50}"
+                        placeholder="Ο κωδικός προϊόντος" pattern="[\S ]{0,50}" required
                         aria-required="true">
                     <div class="invalid-feedback">
                         Παρακαλώ εισάγετε έναν έγκυρο κωδικό μέχρι 50 χαρακτήρες.
@@ -44,8 +44,8 @@
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-currency-euro"></i></span>
                         <input class="form-control" id="price" name="price" type="text"
-                            placeholder="Η τιμή του προϊόντος" required
-                            pattern="\d{0,6}(?:[,.]\d{1,2}|$)" aria-required="true">
+                            placeholder="Η τιμή του προϊόντος" pattern="\d{0,6}(?:[,.]\d{1,2}|$)"
+                            required aria-required="true">
                         <div class="invalid-feedback">
                             Παρακαλώ εισάγετε μια έγκυρη τιμή μέχρι 999999,99 €.
                         </div>
@@ -57,7 +57,7 @@
                         Κατηγορία
                     </label>
                     <input class="form-control" id="category" name="category" type="text"
-                        placeholder="Η κατηγορία προϊόντος" required pattern="[\S ]{0,50}"
+                        placeholder="Η κατηγορία προϊόντος" pattern="[\S ]{0,50}" required
                         aria-required="true">
                     <div class="invalid-feedback">
                         Παρακαλώ εισάγετε μια έγκυρη κατηγορία μέχρι 50 χαρακτήρες.

@@ -35,7 +35,7 @@ class Product {
     static findById = async (id) =>
         new Promise((resolve, reject) => {
             pool.query(
-                `SELECT * FROM product WHERE id = ${pool.escape(id)}`,
+                `SELECT * FROM product WHERE id = ${pool.escape(id)};`,
                 (error, results, fields) => {
                     if (error) return reject(error);
                     resolve(new Product(results[0]));

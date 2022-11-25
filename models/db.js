@@ -12,9 +12,9 @@ pool.on("error", console.error.bind(console, "Connection error: "));
 
 export default pool;
 
-// initializes the database
+// Initializes the database
 export function init() {
-    // connecting to the database
+    // Connecting to the database
     const connection = createConnection({
         host: process.env.DB_HOST || "localhost",
         port: process.env.DB_PORT || 3306,
@@ -24,7 +24,7 @@ export function init() {
     });
     connection.connect();
 
-    // creating the databases if they don't exist
+    // Creating the databases if they don't exist
     connection.query(
         `\
         CREATE DATABASE IF NOT EXISTS ${process.env.DB_SESSION || "session"};
@@ -35,7 +35,7 @@ export function init() {
         }
     );
 
-    // creating the tables if they don't exist
+    // Creating the tables if they don't exist
     connection.query(
         `\
         USE ${process.env.DB || "project"};
@@ -57,7 +57,7 @@ export function init() {
             id INT UNSIGNED NOT NULL AUTO_INCREMENT,
             name VARCHAR(100) NOT NULL,
             product_code VARCHAR(50) NOT NULL,
-            price DECIMAL(8 , 2 ) NOT NULL,
+            price DECIMAL(8, 2) NOT NULL,
             date_of_withdrawal DATETIME,
             seller_name VARCHAR(50) NOT NULL,
             category VARCHAR(50) NOT NULL,
@@ -85,7 +85,7 @@ export function init() {
         }
     );
 
-    // creating the admin if they don't exist
+    // Creating the admin if they don't exist
     connection.query(
         `\
         INSERT INTO user (name, surname, username, salt, hash, email, role, confirmed)
@@ -96,6 +96,6 @@ export function init() {
         }
     );
 
-    // ending the connection
+    // Ending the connection
     connection.end();
 }

@@ -21,6 +21,6 @@ router.route("/register").get(register);
 router.route("/signup").get(register);
 router.route("/signup.php").get(signup).post(catchAsync(create));
 router.route("/welcome.php").get(isLoggedIn, welcome);
-router.route("/logout").get(logout);
+router.route("/logout").get(isLoggedIn, logout);
 
 export default router;

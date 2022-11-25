@@ -30,6 +30,12 @@ body.bg-img {
     z-index: 1;
 }
 
+.modal .btn-close {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+}
+
 /*******************************
 ************ Navbar ************
 *******************************/
