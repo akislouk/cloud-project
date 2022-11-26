@@ -7,6 +7,7 @@ import {
     addToCart,
     cart,
     show,
+    destroy,
 } from "../controllers/buyers.js";
 
 const router = Router();
@@ -15,7 +16,11 @@ router
     .route("/products.php")
     .get(isLoggedIn, catchAsync(index))
     .post(isLoggedIn, catchAsync(addToCart));
+
 router.route("/cart").get(cart);
-router.route("/cart.php").get(isLoggedIn, catchAsync(show));
+router
+    .route("/cart.php")
+    .get(isLoggedIn, catchAsync(show))
+    .delete(isLoggedIn, catchAsync(destroy));
 
 export default router;

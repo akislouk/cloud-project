@@ -109,9 +109,38 @@ export const addToCart = async (req, res, next) => {
 };
 
 export const cart = (req, res) => res.redirect("/cart.php");
+
+// Finds the products in the user's cart and sends them to the frontend
 export const show = async (req, res, next) => {
     try {
+        res.locals.products = await new Promise((resolve, reject) => {
+            pool.query(
+                `\
+                SELECT c.id AS id, user_id, product_id, name, price, date_of_insertion
+                FROM cart AS c
+                INNER JOIN product AS p ON product_id = p.id
+                WHERE user_id = ${req.user.id};`,
+                (error, results, fields) => {
+                    if (error) return reject(error);
+                    resolve(results);
+                }
+            );
+        });
+
         res.render("buyers/cart", { title: "Καλάθι Αγορών" });
+    } catch (error) {
+        next(error);
+    }
+};
+
+// Deletes a product from the user's cart
+export const destroy = async (req, res, next) => {
+    try {
+        await Cart.remove(req.query.cid);
+
+        // Sending success message and redirecting
+        req.flash("success", "Το προϊόν αφαιρέθηκε από το καλάθι σας.");
+        res.redirect("/cart.php");
     } catch (error) {
         next(error);
     }

@@ -36,6 +36,15 @@ body.bg-img {
     top: 1rem;
 }
 
+.mb-tiny {
+    margin-bottom: 2px;
+}
+
+a#empty {
+    font-size: 150px;
+    line-height: 0.8;
+}
+
 /*******************************
 ************ Navbar ************
 *******************************/

@@ -49,7 +49,7 @@ export const create = async (req, res, next) => {
         // Sending success message and redirecting
         req.flash(
             "success",
-            `Το προϊον ${product.name} καταχωρήθηκε με επιτυχία.`
+            `Το προϊον "${product.name}" καταχωρήθηκε με επιτυχία.`
         );
         res.redirect("/seller.php");
     } catch (error) {
@@ -98,6 +98,7 @@ export const update = async (req, res, next) => {
     }
 };
 
+// Deletes a product from the database
 export const destroy = async (req, res, next) => {
     try {
         await Product.remove(req.params.pid);

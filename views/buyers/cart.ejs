@@ -10,15 +10,97 @@
     </div>
 </header>
 
-<div class="container-lg">
+<% if (products.length > 0) { let i = 0, sum = 0; %>
+<div class="container-fluid">
     <div class="row">
-        <div class="col-md-8">
+        <main class="col-lg-8">
             <h2>Το καλάθι σας</h2>
-            
-        </div>
 
-        <div class="col-md-4">
+            <div class="card mb-4">
+                <% for (const product of products) { sum += product.price; i++ %>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-9 col-sm-7 col-md-8 order-1 mb-2 mb-sm-0 text-truncate">
+                            <p class="fs-5 mb-tiny"><%= product.name %></p>
+                            <small class="text-muted">
+                                Προστέθηκε στο καλάθι:
+                                <%= product.date_of_insertion.toLocaleString() %>
+                            </small>
+                        </div>
+
+                        <div class="col-auto col-sm-4 col-md-3 order-3 order-sm-2">
+                            <p class="fs-5 text-end mb-0 fw-bold">
+                                <%= new Intl.NumberFormat("el-GR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(product.price) %>
+                                €
+                            </p>
+                        </div>
+
+                        <div class="col-3 col-sm-1 order-2 order-sm-3 text-end">
+                            <form id="delete-form-<%= i %>"
+                                action="/cart.php?_method=delete&cid=<%= product.id %>"
+                                method="POST">
+                                <a class="text-reset fs-5" role="button"
+                                    title="Αφαίρεση προϊόντος από το καλάθι" href="#"
+                                    onclick="this.parentElement.submit()">
+                                    <i class="bi bi-trash-fill"></i>
+                                </a>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <% if (i !== products.length) { %>
+                <hr class="my-0">
+                <% }} sum = new Intl.NumberFormat("el-GR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(sum);%>
+            </div>
+        </main>
+
+        <section class="col-lg-4">
             <h2>Σύνοψη</h2>
-        </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6 mb-2">
+                            <small>Αξία προϊόντων</small>
+                        </div>
+                        <div class="col-6 text-end mb-2">
+                            <small><strong><%= sum %> €</strong></small>
+                        </div>
+                        <div class="col-6">
+                            <small>Μεταφορικά</small>
+                        </div>
+                        <div class="col-6 text-end">
+                            <small><strong>ΔΩΡΕΑΝ</strong></small>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="my-0">
+
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6"><strong>Σύνολο</strong></div>
+                        <div class="col-6 text-end"><strong><%= sum %> €</strong></div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 </div>
+
+<% } else { %>
+<div class="row justify-content-center text-center">
+    <main class="col-md-9 col-xl-7">
+        <h2 class="mb-5">Το καλάθι σας είναι άδειο!</h2>
+
+        <a class="text-muted" id="empty" href="/products.php">
+            <i class="bi bi-cart-plus-fill"></i>
+        </a>
+
+        <p class="text-muted mt-5">
+            Για να προσθέσετε προϊόντα στο καλάθι, βρείτε τα προϊόντα που θέλετε να αγοράσετε
+            στην <a href="/products.php">κεντρική σελίδα</a> και πατήστε το κουμπί "Αγορά".
+        </p>
+    </main>
+</div>
+<% }  %>

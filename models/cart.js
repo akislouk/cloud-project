@@ -43,7 +43,8 @@ class Cart {
     static remove = async (id) =>
         new Promise((resolve, reject) => {
             pool.query(
-                `DELETE FROM cart WHERE id = ${id};`,
+                "DELETE FROM cart WHERE id = ?;",
+                id,
                 (error, results, fields) => {
                     if (error) return reject(error);
                     resolve(results);

@@ -74,8 +74,11 @@ export const create = async (req, res, next) => {
         // Saving the new user to the database
         await user.save();
 
-        req.flash("success", `Καλώς ήρθατε στο Cloud Project, ${user.name}!`);
-        res.redirect("/welcome.php");
+        req.flash(
+            "success",
+            `Καλώς ήρθατε στο Cloud Project, ${user.name}! Παρακαλώ περιμένετε να επιβεβαιώσει την εγγραφή σας ο διαχειριστής.`
+        );
+        res.redirect("/index.php");
     } catch (error) {
         next(error);
     }
