@@ -10,6 +10,7 @@
                 Εδώ μπορείτε να δείτε και να διαχειριστείτε όλα τα προϊόντα που έχετε
                 καταχωρήσει στην υπηρεσία μας ή να προσθέσετε νέα προϊόντα.
             </p>
+
             <a class="btn btn-lg btn-primary" role="button" title="Προσθήκη νέου προϊόντος"
                 href="/seller/new">
                 Νέο προϊόν <i class="bi bi-cloud-plus-fill ms-1"></i>
@@ -32,7 +33,7 @@
                 <% let i = 0; for (const product of products) { i++;%>
                 <div class="col-12 col-sm-6 col-md-4 my-4">
                     <div class="card">
-                        <a href="/seller/<%= product.id %>">
+                        <a class="mb-4" href="/seller/<%= product.id %>">
                             <img class="card-img-top img-fluid" <% if (i % 3 === 0) { %>
                                 src="https://source.unsplash.com/collection/44204348/548x360"
                                 <% } else if (i % 2 === 0) { %>
@@ -43,19 +44,21 @@
                         </a>
 
                         <div class="card-body p-0">
-                            <h4 class="card-title text-truncate mb-0 pt-2 px-3">
+                            <h4 class="card-title text-truncate mb-0 mx-3">
                                 <%= product.name %>
                             </h4>
-                            <p class="card-text text-truncate mb-1 px-3">
+                            <p class="card-text text-truncate mb-3 mx-3">
                                 <small class="text-muted">
                                     <%= product.date_of_withdrawal %> <%= product.product_code %>
                                 </small>
                             </p>
-                            <h5 class="card-subtitle display-6 text-truncate mt-1 pb-2 px-3">
+
+                            <h5 class="display-6 text-truncate mb-2 mx-3">
                                 <%= product.price %><i class="bi bi-currency-euro"></i>
                             </h5>
-                            <div class="px-3 pb-2">
-                                <a class="btn btn-primary w-100 mb-2 py-2"
+
+                            <div class="mx-3 mb-3">
+                                <a class="btn btn-primary w-100 mb-3 py-2"
                                     href="/seller/<%= product.id %>">
                                     Edit
                                 </a>
@@ -64,6 +67,7 @@
                                     <button class="btn btn-danger w-100 py-2">Delete</button>
                                 </form>
                             </div>
+
                             <div class="card-footer text-center text-truncate">
                                 <%= product.category %>
                             </div>

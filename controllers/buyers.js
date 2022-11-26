@@ -6,8 +6,22 @@ export const index = async (req, res, next) => {
     try {
         // Deconstructing the request query object
         const { product, seller, category, date } = req.query;
-        const min = req.query.min || 0;
-        const max = req.query.max || 999999.99;
+
+        // Validating the min/max values that were given
+        let min = 0;
+        let max = 999999.99;
+
+        if (req.query.min) {
+            if (req.query.max)
+                if (parseFloat(req.query.min) < parseFloat(req.query.max)) {
+                    min = req.query.min;
+                    max = req.query.max;
+                } else {
+                    min = req.query.max;
+                    max = req.query.min;
+                }
+            else min = req.query.min;
+        } else req.query.max && (max = req.query.max);
 
         // Defining the base query
         let query = `\
@@ -21,18 +35,16 @@ export const index = async (req, res, next) => {
                 u.name AS first_name
             FROM product AS p
             JOIN user AS u ON seller_name = username
-            WHERE 1 = 1`;
+            WHERE price BETWEEN ${min} AND ${max}`;
 
         // Adding conditions to the query's where clause
-        product && (query += ` AND p.name = ${pool.escape(product)}`);
+        product &&
+            (query += ` AND p.name LIKE ${pool.escape("%" + product + "%")}`);
         seller &&
             (query += ` AND (seller_name = ${pool.escape(
                 seller
             )} OR u.name = ${pool.escape(seller)})`);
         category && (query += ` AND category = ${pool.escape(category)}`);
-        query += ` AND price BETWEEN ${pool.escape(min)} AND ${pool.escape(
-            max
-        )}`;
         date && (query += ` AND date_of_withdrawal = ${pool.escape(date)};`);
 
         // Finding the products
@@ -51,7 +63,7 @@ export const index = async (req, res, next) => {
             }).format(product.price);
         });
 
-        // Finding the min and max prices
+        // Finding the min and max prices in the database to initialize the inputs
         res.locals.price = await new Promise((resolve, reject) => {
             pool.query(
                 "SELECT MIN(price) AS min, MAX(price) as max FROM product",
