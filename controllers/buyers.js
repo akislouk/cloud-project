@@ -1,16 +1,17 @@
 import pool from "../models/db.js";
+import Cart from "../models/cart.js";
 
 export const products = (req, res) => res.redirect("/products.php");
 
+// Finds products based on the URL search params and sends them to the frontend
 export const index = async (req, res, next) => {
     try {
         // Deconstructing the request query object
         const { product, seller, category, date } = req.query;
-
-        // Validating the min/max values that were given
         let min = 0;
         let max = 999999.99;
 
+        // Validating the min/max values
         if (req.query.min) {
             if (req.query.max)
                 if (parseFloat(req.query.min) < parseFloat(req.query.max)) {
@@ -45,7 +46,10 @@ export const index = async (req, res, next) => {
                 seller
             )} OR u.name = ${pool.escape(seller)})`);
         category && (query += ` AND category = ${pool.escape(category)}`);
-        date && (query += ` AND date_of_withdrawal = ${pool.escape(date)};`);
+        date &&
+            (query += ` AND date_of_withdrawal LIKE ${pool.escape(
+                "%" + date + "%"
+            )};`);
 
         // Finding the products
         res.locals.products = await new Promise((resolve, reject) => {
@@ -75,6 +79,39 @@ export const index = async (req, res, next) => {
         });
 
         res.render("buyers", { title: "Κεντρική" });
+    } catch (error) {
+        next(error);
+    }
+};
+
+// Add a product to the user's cart
+export const addToCart = async (req, res, next) => {
+    try {
+        // Creating a cart using the Cart class constructor
+        const cart = new Cart({
+            user_id: req.user.id,
+            product_id: req.query.pid,
+            date_of_insertion: new Date()
+                .toISOString()
+                .slice(0, 19)
+                .replace("T", " "),
+        });
+
+        // Saving the cart to the database
+        await cart.save();
+
+        // Sending success message and redirecting
+        req.flash("success", "Το προϊόν προστέθηκε στο καλάθι σας.");
+        res.redirect("/products.php");
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const cart = (req, res) => res.redirect("/cart.php");
+export const show = async (req, res, next) => {
+    try {
+        res.render("buyers/cart", { title: "Καλάθι Αγορών" });
     } catch (error) {
         next(error);
     }

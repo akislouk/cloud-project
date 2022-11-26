@@ -142,8 +142,7 @@
                             </h5>
 
                             <div class="mx-3 mb-3">
-                                <form action="/seller/<%= product.id %>?_method=delete"
-                                    method="POST">
+                                <form action="/products.php?pid=<%= product.id %>" method="POST">
                                     <button
                                         class="btn btn-lg btn-primary d-flex justify-content-between w-100 py-2">
                                         Αγορά <i class="bi bi-cart-fill"></i>
