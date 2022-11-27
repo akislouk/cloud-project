@@ -1,0 +1,17 @@
+{
+    "$schema": "https://json.schemastore.org/web-manifest-combined.json",
+    "name": "Cloud Project",
+    "short_name": "Cloud Project",
+    "start_url": "https://localhost:3000",
+    "display": "standalone",
+    "background_color": "#fff",
+    "theme_color": "#1b1642",
+    "description": "Εφαρμογή διαδικτυακών αγορών που δημιουργήθηκε στα πλαίσια του μαθήματος ΠΛΗ 513.",
+    "icons": [
+        {
+            "src": "images/favicon.svg",
+            "sizes": "any",
+            "type": "image/svg"
+        }
+    ]
+}

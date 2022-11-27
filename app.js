@@ -1,19 +1,23 @@
+// Third-party imports
 import dotenv from "dotenv";
 if (process.env.NODE_ENV !== "production") dotenv.config();
 import express from "express";
 import ejsMate from "ejs-mate";
 import methodOverride from "method-override";
-import { fileURLToPath } from "url";
-import { join, dirname } from "path";
 import session from "express-session";
 import MySQLStore from "express-mysql-session";
 import flash from "connect-flash";
 
+// Node imports
+import { fileURLToPath } from "url";
+import { join, dirname } from "path";
+
+// First-party imports
 import ExpressError from "./utils/ExpressError.js";
 import { init } from "./models/db.js";
 import User from "./models/user.js";
 import usersRoutes from "./routes/users.js";
-import buyersRoutes from "./routes/buyers.js";
+import productsRoutes from "./routes/products.js";
 import sellersRoutes from "./routes/sellers.js";
 
 // Initializing the database. In a real app this would be replaced by
@@ -82,7 +86,7 @@ app.use((req, res, next) => {
 
 // Using my routes
 app.use("/", usersRoutes);
-app.use("/", buyersRoutes);
+app.use("/", productsRoutes);
 app.use("/", sellersRoutes);
 
 // Sending a 404 error if the user tries to access a route that doesn't exist

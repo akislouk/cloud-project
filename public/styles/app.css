@@ -1,6 +1,6 @@
 body.bg-img {
     background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-        url("https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80");
+        url("../images/background.jpg");
     background-size: cover;
     background-position: center;
 }
@@ -26,6 +26,10 @@ body.bg-img {
     z-index: 1;
 }
 
+.mb-tiny {
+    margin-bottom: 2px;
+}
+
 .z-index-1 {
     z-index: 1;
 }
@@ -34,10 +38,6 @@ body.bg-img {
     position: absolute;
     right: 1rem;
     top: 1rem;
-}
-
-.mb-tiny {
-    margin-bottom: 2px;
 }
 
 a#empty {

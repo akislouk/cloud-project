@@ -1,0 +1,191 @@
+<% layout("layouts/boilerplate") %>
+
+<header class="container-lg py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-9 col-xl-7 text-center">
+            <h1 class="display-2 mb-4">
+                Cloud Project
+            </h1>
+            <p class="lead text-muted mb-5">
+                Βρείτε τα προϊόντα που επιθυμείτε στις καλύτερες τιμές της αγοράς!
+            </p>
+
+            <a class="btn btn-lg btn-light col-9 col-sm-6" data-bs-toggle="modal"
+                data-bs-target="#search-modal" href="#">
+                <div class="row">
+                    <div class="col-2 text-start"><i class="bi bi-search"></i></div>
+                    <div class="col-8">Αναζήτηση</div>
+                    <div class="col-2"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+</header>
+
+<!-- Modal -->
+<div class="modal fade" id="search-modal" tabindex="-1" aria-labelledby="search-modal-label"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content px-5 py-4">
+            <button class="btn-close" data-bs-dismiss="modal" type="button"
+                aria-label="Close"></button>
+
+            <div class="modal-body text-center">
+                <h2 class="mb-4" id="search-modal-label">
+                    Αναζήτηση
+                </h2>
+
+                <form>
+                    <div class="form-group form-floating text-start mb-4">
+                        <input class="form-control" id="product" name="product" type="text"
+                            placeholder="Όνομα προϊόντος">
+                        <label class="text-muted opacity-100" for="product">
+                            Όνομα προϊόντος
+                        </label>
+                    </div>
+
+                    <div class="form-group form-floating text-start mb-4">
+                        <input class="form-control" id="seller" name="seller" type="text"
+                            placeholder="Όνομα πωλητή">
+                        <label class="text-muted opacity-100" for="seller">
+                            Όνομα πωλητή
+                        </label>
+                    </div>
+
+                    <div class="form-group form-floating text-start mb-4">
+                        <input class="form-control" id="category" name="category" type="text"
+                            placeholder="Κατηγορία">
+                        <label class="text-muted opacity-100" for="category">
+                            Κατηγορία
+                        </label>
+                    </div>
+
+                    <div class="text-muted text-start">
+                        Περιοχή τιμών
+                    </div>
+                    <div class="input-group mb-4">
+                        <div class="form-group col-6 text-start">
+                            <input class="form-range" id="min" name="min" value="<%= price.min %>"
+                                type="range" min="<%= price.min %>" max="<%= price.max %>"
+                                step="0.01">
+                            <label class="text-muted" for="min">
+                                Από: <span id="current-min">
+                                    <%= new Intl.NumberFormat("el-GR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(price.min) %>
+                                </span> €
+                            </label>
+                        </div>
+
+                        <div class="form-group col-6 text-start">
+                            <input class="form-range" id="max" name="max" value="<%= price.max %>"
+                                type="range" min="<%= price.min %>" max="<%= price.max %>"
+                                step="0.01">
+                            <label class="text-muted" for="max">
+                                Μέχρι: <span id="current-max">
+                                    <%= new Intl.NumberFormat("el-GR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(price.max) %>
+                                </span> €
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group form-floating text-start mb-4">
+                        <input class="form-control" id="date" name="date" type="datetime-local"
+                            placeholder="Ημερομηνία απόσυρσης">
+                        <label class="text-muted opacity-100" for="date">
+                            Ημερομηνία απόσυρσης
+                        </label>
+                    </div>
+
+                    <button class="btn btn-primary">
+                        Αναζήτηση
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr class="hr-sm border border-3 border-warning mx-auto">
+
+<div class="container-lg py-5">
+    <div class="row justify-content-center">
+        <main class="col-xl-10">
+            <h2 class="display-5 text-center mb-4">
+                Προϊόντα
+            </h2>
+
+            <div class="row">
+                <% if (products.length > 0) { %>
+                <% let i = 0; for (const product of products) { i++;%>
+                <div class="col-12 col-sm-6 col-md-4 my-4">
+                    <div class="card">
+                        <img class="card-img-top img-fluid" <% if (i % 3 === 0) { %>
+                            src="https://source.unsplash.com/collection/44204348/548x360"
+                            <% } else if (i % 2 === 0) { %>
+                            src="https://source.unsplash.com/collection/8788025/548x360"
+                            <% } else { %>
+                            src="https://source.unsplash.com/collection/4474589/548x360" <% } %>
+                            alt="Εικόνα προϊόντος">
+
+                        <div class="card-body p-0">
+                            <h4 class="card-title text-truncate mt-4 mb-0 mx-3">
+                                <%= product.name %>
+                            </h4>
+                            <p class="card-text text-truncate mb-3 mx-3">
+                                <small class="text-muted">
+                                    <%= product.first_name %> - <%= product.seller_name %>
+                                    <%= product.date_of_withdrawal %>
+                                </small>
+                            </p>
+
+                            <h5 class="display-6 text-truncate mb-2 mx-3">
+                                <%= product.price %><i class="bi bi-currency-euro"></i>
+                            </h5>
+
+                            <div class="mx-3 mb-3">
+                                <form action="/products.php?pid=<%= product.id %>" method="POST">
+                                    <button
+                                        class="btn btn-lg btn-primary d-flex justify-content-between w-100 py-2">
+                                        Αγορά <i class="bi bi-cart-fill"></i>
+                                    </button>
+                                </form>
+                            </div>
+
+                            <div class="card-footer text-center text-truncate">
+                                <%= product.category %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <% }} else { %>
+                <p class="text-muted text-center">
+                    Δε βρέθηκε κανένα προϊόν.
+                </p>
+                <% } %>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script>
+    minHandler.call(document.getElementById("min"));
+    maxHandler.call(document.getElementById("max"));
+
+    document.getElementById("min").addEventListener("input", minHandler, false);
+    document.getElementById("max").addEventListener("input", maxHandler, false);
+
+    function minHandler() {
+        const price = new Intl.NumberFormat("el-GR", {
+            minimumFractionDigits: 2, maximumFractionDigits: 2
+        }).format(this.value);
+        document.getElementById("current-min").innerText = price;
+        document.getElementById("max").min = this.value;
+    }
+
+    function maxHandler() {
+        const price = new Intl.NumberFormat("el-GR", {
+            minimumFractionDigits: 2, maximumFractionDigits: 2
+        }).format(this.value);
+        document.getElementById("current-max").innerText = price;
+        document.getElementById("min").max = this.value;
+    }
+</script>
