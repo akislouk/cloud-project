@@ -26,7 +26,7 @@
         </thead>
         <tbody>
             <% let i = 0; for (const usr of users) { i++ %>
-            <tr>
+            <tr id="row-<%= i %>">
                 <td class="text-end"><%= usr.id %></td>
                 <td><%= usr.name %></td>
                 <td><%= usr.surname %></td>
@@ -47,6 +47,25 @@
                             <i class="bi bi-trash-fill text-danger"></i>
                         </a>
                     </form>
+
+                    <script>
+                        document.getElementById("delete-form-<%= i %>").addEventListener("submit", async function (event) {
+                            event.preventDefault();
+
+                            await fetch("http://localhost:3000/administration/<%= usr.id %>?ref=index", {
+                                method: "delete",
+                            })
+                                .then((res) => {
+                                    if (res.ok) document.getElementById("row-<%= i %>").remove();
+                                    return res.text();
+                                })
+                                .then((res) => {
+                                    const el = document.createElement("div");
+                                    el.innerHTML = res;
+                                    document.body.appendChild(el);
+                                });
+                        })
+                    </script>
                     <% } %>
                 </td>
             </tr>

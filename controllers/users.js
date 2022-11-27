@@ -169,9 +169,19 @@ export const destroy = async (req, res, next) => {
         else {
             await User.remove(req.params.uid);
 
-            // Sending success message and redirecting
-            req.flash("success", "Ο χρήστης διαγράφηκε με επιτυχία.");
-            res.redirect("/administration.php");
+            // Sending success message and redirecting if the request came from the edit page
+            if (!req.query.ref) {
+                req.flash("success", "Ο χρήστης διαγράφηκε με επιτυχία.");
+                res.redirect("/administration.php");
+            } else {
+                res.status(200).send(`
+                    <div class="alert alert-success alert-dismissible fade show border-0 position-fixed bottom-0 end-0 z-index-1 me-3 mb-5"
+                        role="alert" aria-live="polite" aria-atomic="true">
+                        Το προϊόν "${req.product.name}" διαγράφηκε με επιτυχία.
+                        <button class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                `);
+            }
         }
     } catch (error) {
         next(error);
