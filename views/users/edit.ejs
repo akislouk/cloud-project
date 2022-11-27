@@ -93,16 +93,16 @@
                     </select>
                 </div>
 
-                <div class="col-md-auto d-flex justify-content-evenly mt-4">
-                    <a class="btn btn-lg btn-secondary" href="/administration.php">
+                <div class="col-md-auto d-flex justify-content-evenly flex-wrap mt-4">
+                    <a class="btn btn-secondary mb-4" href="/administration.php">
                         Ακύρωση
                     </a>
                     <% if (user.id !== usr.id) { %>
-                    <button class="btn btn-lg btn-danger" form="delete-form">
+                    <button class="btn btn-danger mb-4" form="delete-form">
                         Διαγραφή
                     </button>
                     <% } %>
-                    <button class="btn btn-lg btn-success">
+                    <button class="btn btn-success mb-4">
                         Ενημέρωση
                     </button>
                 </div>

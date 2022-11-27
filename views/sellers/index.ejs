@@ -54,17 +54,17 @@
                             </p>
 
                             <h5 class="display-6 text-truncate mb-2 mx-3">
-                                <%= product.price %><i class="bi bi-currency-euro"></i>
+                                <%= product.price %> €
                             </h5>
 
                             <div class="mx-3 mb-3">
-                                <a class="btn btn-primary w-100 mb-3 py-2"
+                                <a class="btn btn-primary w-100 mb-3"
                                     href="/seller/<%= product.id %>">
                                     Edit
                                 </a>
                                 <form id="delete-form-<%= i %>"
                                     action="/seller/<%= product.id %>?_method=delete" method="POST">
-                                    <button class="btn btn-danger w-100 py-2">Delete</button>
+                                    <button class="btn btn-danger w-100">Delete</button>
                                 </form>
                             </div>
 

@@ -11,7 +11,7 @@
             </p>
 
             <a class="btn btn-lg btn-light col-9 col-sm-6" data-bs-toggle="modal"
-                data-bs-target="#search-modal" href="#">
+                data-bs-target="#search-modal" role="button" title="Αναζήτηση προϊόντων" href="#">
                 <div class="row">
                     <div class="col-2 text-start"><i class="bi bi-search"></i></div>
                     <div class="col-8">Αναζήτηση</div>
@@ -138,13 +138,13 @@
                             </p>
 
                             <h5 class="display-6 text-truncate mb-2 mx-3">
-                                <%= product.price %><i class="bi bi-currency-euro"></i>
+                                <%= product.price %> €
                             </h5>
 
                             <div class="mx-3 mb-3">
                                 <form action="/products.php?pid=<%= product.id %>" method="POST">
                                     <button
-                                        class="btn btn-lg btn-primary d-flex justify-content-between w-100 py-2">
+                                        class="btn btn-primary d-flex justify-content-between w-100">
                                         Αγορά <i class="bi bi-cart-fill"></i>
                                     </button>
                                 </form>
