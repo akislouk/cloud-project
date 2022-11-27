@@ -11,7 +11,7 @@
 </header>
 
 <% if (products.length > 0) { let i = 0, sum = 0; %>
-<div class="container-fluid">
+<div class="container-lg">
     <div class="row">
         <main class="col-lg-8">
             <h2>Το καλάθι σας</h2>
@@ -38,7 +38,7 @@
                         <div class="col-3 col-sm-1 order-2 order-sm-3 text-end">
                             <form id="delete-form-<%= i %>"
                                 action="/cart.php?_method=delete&cid=<%= product.id %>"
-                                method="POST">
+                                method="post">
                                 <a class="text-reset fs-5" role="button"
                                     title="Αφαίρεση προϊόντος από το καλάθι" href="#"
                                     onclick="this.parentElement.submit()">

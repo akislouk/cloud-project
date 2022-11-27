@@ -1,6 +1,6 @@
 import { Router } from "express";
 import catchAsync from "../utils/catchAsync.js";
-import { isLoggedIn } from "../middleware.js";
+import { isLoggedIn, isOwner } from "../middleware.js";
 import {
     index,
     products,
@@ -21,6 +21,6 @@ router.route("/cart").get(cart);
 router
     .route("/cart.php")
     .get(isLoggedIn, catchAsync(show))
-    .delete(isLoggedIn, catchAsync(destroy));
+    .delete(isLoggedIn, catchAsync(isOwner), catchAsync(destroy));
 
 export default router;

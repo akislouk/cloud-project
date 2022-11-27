@@ -1,4 +1,5 @@
 import User from "../models/user.js";
+import ExpressError from "../utils/ExpressError.js";
 const { scrypt, webcrypto } = await import("node:crypto");
 
 export const home = (req, res) => res.redirect("/index.php");
@@ -98,4 +99,81 @@ export const logout = (req, res, next) => {
             res.redirect("/index.php");
         });
     });
+};
+
+export const admin = (req, res) => res.redirect("/administration.php");
+
+// Finds all the users, saves them to the response object and displays the admin page
+export const show = async (req, res, next) => {
+    try {
+        res.locals.users = await User.find();
+        res.render("users/admin", { title: "Διαχείριση" });
+    } catch (error) {
+        next(error);
+    }
+};
+
+// Finds the user, saves them to the response object and displays the edit form
+export const edit = async (req, res, next) => {
+    try {
+        res.locals.usr = await User.findById(req.params.uid);
+        if (res.locals.usr)
+            res.render("users/edit", { title: "Επεξεργασία Χρήστη" });
+        else throw new ExpressError("Not found.", 404);
+    } catch (error) {
+        next(error);
+    }
+};
+
+// Updates the user in the database
+export const update = async (req, res, next) => {
+    try {
+        // Finding the user to be updated
+        const user = await User.findById(req.params.uid).then((result) => {
+            if (result) return new User(result);
+            else next(new ExpressError("Not found.", 404));
+        });
+
+        // Deconstructing the request body
+        const { name, surname, username, email, role, confirmed } = req.body;
+
+        // Updating the user details if any new values are given
+        name && (user.name = name);
+        surname && (user.surname = surname);
+        username && (user.username = username);
+        email && (user.email = email);
+        role && (user.role = role);
+        confirmed && (user.confirmed = parseInt(confirmed));
+
+        // Updating the user in the database
+        await user.update();
+
+        // Sending success message and redirecting
+        req.flash("success", "Οι αλλαγές σας αποθηκεύτηκαν με επιτυχία.");
+        res.redirect("/administration.php");
+    } catch (error) {
+        next(error);
+    }
+};
+
+// Deletes a user from the database
+export const destroy = async (req, res, next) => {
+    try {
+        if (req.user.id === parseInt(req.params.uid))
+            next(
+                new ExpressError(
+                    "Δεν μπορείς να διαγράψεις τον εαυτό σου!",
+                    403
+                )
+            );
+        else {
+            await User.remove(req.params.uid);
+
+            // Sending success message and redirecting
+            req.flash("success", "Ο χρήστης διαγράφηκε με επιτυχία.");
+            res.redirect("/administration.php");
+        }
+    } catch (error) {
+        next(error);
+    }
 };

@@ -1,0 +1,56 @@
+<% layout("layouts/boilerplate") %>
+
+<header class="container-lg py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-9 col-xl-7 text-center">
+            <h1 class="display-2 mb-4">
+                Διαχείριση
+            </h1>
+        </div>
+    </div>
+</header>
+
+<div class="container-lg table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th class="text-end">ID</th>
+                <th>Όνομα</th>
+                <th>Επίθετο</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Ρόλος</th>
+                <th class="text-end">Επιβεβαιωμένος</th>
+                <th class="text-center">Ενέργειες</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% let i = 0; for (const usr of users) { i++ %>
+            <tr>
+                <td class="text-end"><%= usr.id %></td>
+                <td><%= usr.name %></td>
+                <td><%= usr.surname %></td>
+                <td><%= usr.username %></td>
+                <td><%= usr.email %></td>
+                <td class="text-truncate"><%= usr.role.replace("product ", "") %></td>
+                <td class="text-end"><%= usr.confirmed %></td>
+                <td class="d-flex justify-content-evenly">
+                    <a class="text-reset" title="Επεξεργασία χρήστη"
+                        href="/administration/<%= usr.id %>">
+                        <i class="bi bi-pencil-fill text-info"></i>
+                    </a>
+                    <% if (user.id !== usr.id) { %>
+                    <form id="delete-form-<%= i %>"
+                        action="/administration/<%= usr.id %>?_method=delete" method="post">
+                        <a class="text-reset" role="button" title="Διαγραφή χρήστη" href="#"
+                            onclick="this.parentElement.submit()">
+                            <i class="bi bi-trash-fill text-danger"></i>
+                        </a>
+                    </form>
+                    <% } %>
+                </td>
+            </tr>
+            <% } %>
+        </tbody>
+    </table>
+</div>

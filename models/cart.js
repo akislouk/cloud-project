@@ -1,3 +1,4 @@
+import ExpressError from "../utils/ExpressError.js";
 import pool from "./db.js";
 
 // Cart class
@@ -31,10 +32,18 @@ class Cart {
     static findById = async (id) =>
         new Promise((resolve, reject) => {
             pool.query(
-                `SELECT * FROM cart WHERE id = ${pool.escape(id)};`,
+                "SELECT * FROM cart WHERE id = ?",
+                id,
                 (error, results, fields) => {
                     if (error) return reject(error);
-                    resolve(new Product(results[0]));
+                    if (!results[0])
+                        return reject(
+                            new ExpressError(
+                                "Δεν έχετε τα απαραίτητα δικαιώματα για να πραγματοποιήσετε αυτήν την ενέργεια.",
+                                403
+                            )
+                        );
+                    resolve(new Cart(results[0]));
                 }
             );
         });

@@ -1,0 +1,112 @@
+<% layout("layouts/boilerplate") %>
+
+<div class="container-lg py-5">
+    <div class="row justify-content-center">
+        <main class="col-sm-10 col-md-7 col-lg-6">
+            <header class="text-center pb-5">
+                <h1 class="display-2 mb-4">
+                    Επεξεργασία Χρήστη
+                </h1>
+                <p class="lead text-muted mb-0">
+                    Επεξεργαστείτε τα στοιχεία του χρήστη <%= usr.username %>.
+                </p>
+            </header>
+
+            <form class="d-none" id="delete-form"
+                action="/administration/<%= usr.id %>?_method=delete" method="post"></form>
+
+            <form class="validate-form" action="/administration/<%= usr.id %>?_method=put"
+                method="post" novalidate>
+                <div class="form-group mb-4">
+                    <label class="form-label" for="name">
+                        Όνομα
+                    </label>
+                    <input class="form-control" id="name" name="name" type="text"
+                        placeholder="<%= usr.name %>" pattern="[\p{L} ,.'’-]{0,50}$">
+                    <div class="invalid-feedback">
+                        Παρακαλώ εισάγετε ένα έγκυρο όνομα μέχρι 50 χαρακτήρες.
+                    </div>
+                </div>
+
+                <div class="form-group mb-4">
+                    <label class="form-label" for="surname">
+                        Επίθετο
+                    </label>
+                    <input class="form-control" id="surname" name="surname" type="text"
+                        placeholder="<%= usr.surname %>" pattern="[\p{L} ,.'’-]{0,50}$">
+                    <div class="invalid-feedback">
+                        Παρακαλώ εισάγετε ένα έγκυρο όνομα μέχρι 50 χαρακτήρες.
+                    </div>
+                </div>
+
+                <div class="form-group mb-4">
+                    <label class="form-label" for="username">
+                        Όνομα χρήστη
+                    </label>
+                    <input class="form-control" id="username" name="username" type="text"
+                        placeholder="<%= usr.username %>" pattern="[\p{L} ,.'’-]{0,50}$">
+                    <div class="invalid-feedback">
+                        Παρακαλώ εισάγετε ένα έγκυρο όνομα χρήστη μέχρι 50 χαρακτήρες.
+                    </div>
+                </div>
+
+                <div class="form-group mb-4">
+                    <label class="form-label" for="email">
+                        Email
+                    </label>
+                    <input class="form-control" id="email" name="email" type="email"
+                        placeholder="<%= usr.email %>" maxlength="255">
+                    <div class="invalid-feedback">
+                        Παρακαλώ εισάγετε ένα έγκυρο email.
+                    </div>
+                </div>
+
+                <div class="form-group mb-4">
+                    <label class="form-label" for="role">
+                        Ρόλος
+                    </label>
+                    <select class="form-select" id="role" name="role">
+                        <option value="user" <% if (usr.role === "user") { %> selected <% } %>>
+                            Χρήστης
+                        </option>
+                        <option value="product seller" <% if (usr.role === "product seller") { %>
+                            selected <% } %>>
+                            Πωλητής
+                        </option>
+                        <option value="admin" <% if (usr.role === "admin") { %> selected <% } %>>
+                            Διαχειριστής
+                        </option>
+                    </select>
+                </div>
+
+                <div class="form-group mb-4">
+                    <label class="form-label" for="confirmed">
+                        Επιβεβαιωμένος
+                    </label>
+                    <select class="form-select" id="confirmed" name="confirmed">
+                        <option value="1" <% if (usr.confirmed === 1) { %> selected <% } %>>
+                            True
+                        </option>
+                        <option value="0" <% if (usr.confirmed === 0) { %> selected <% } %>>
+                            False
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-md-auto d-flex justify-content-evenly mt-4">
+                    <a class="btn btn-lg btn-secondary" href="/administration.php">
+                        Ακύρωση
+                    </a>
+                    <% if (user.id !== usr.id) { %>
+                    <button class="btn btn-lg btn-danger" form="delete-form">
+                        Διαγραφή
+                    </button>
+                    <% } %>
+                    <button class="btn btn-lg btn-success">
+                        Ενημέρωση
+                    </button>
+                </div>
+            </form>
+        </main>
+    </div>
+</div>

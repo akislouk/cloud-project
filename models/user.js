@@ -1,7 +1,7 @@
 import pool from "./db.js";
 const { scrypt } = await import("node:crypto");
 
-// user class
+// The user class
 class User {
     constructor(user) {
         this.id = user.id || null;
@@ -36,6 +36,39 @@ class User {
             );
         });
 
+    // Updates a user in the database
+    update = async () =>
+        new Promise((resolve, reject) => {
+            pool.query(
+                `UPDATE user
+                SET
+                    name = ${pool.escape(this.name)},
+                    surname = ${pool.escape(this.surname)},
+                    username = ${pool.escape(this.username)},
+                    email = ${pool.escape(this.email)},
+                    role = ${pool.escape(this.role)},
+                    confirmed = ${this.confirmed}
+                WHERE ID = ?;`,
+                this.id,
+                (error, results, fields) => {
+                    if (error) return reject(error);
+                    resolve(results[0]);
+                }
+            );
+        });
+
+    // Finds all the users
+    static find = async () =>
+        new Promise((resolve, reject) => {
+            pool.query(
+                "SELECT id, name, surname, username, email, role, confirmed FROM user",
+                (error, results, fields) => {
+                    if (error) return reject(error);
+                    resolve(results);
+                }
+            );
+        });
+
     // Finds a user using their id
     static findById = async (id) =>
         new Promise((resolve, reject) => {
@@ -64,15 +97,32 @@ class User {
             );
         });
 
-        const hash = await new Promise((resolve, reject) =>
-            scrypt(password, user.salt, 64, (error, hash) => {
-                if (error) return reject(error);
-                resolve(hash.toString("hex").toUpperCase());
-            })
-        );
+        if (user) {
+            // Encrypting the given password using the user's salt from the database
+            const hash = await new Promise((resolve, reject) =>
+                scrypt(password, user.salt, 64, (error, hash) => {
+                    if (error) return reject(error);
+                    resolve(hash.toString("hex").toUpperCase());
+                })
+            );
 
-        return hash === user.hash ? user : false;
+            // Comparing the new encrypted password with the one in the database
+            return hash === user.hash ? user : false;
+        } else return false;
     }
+
+    // Deletes a user using their id
+    static remove = async (id) =>
+        new Promise((resolve, reject) => {
+            pool.query(
+                "DELETE FROM user WHERE id = ?;",
+                id,
+                (error, results, fields) => {
+                    if (error) return reject(error);
+                    resolve(results);
+                }
+            );
+        });
 }
 
 export default User;
