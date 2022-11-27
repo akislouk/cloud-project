@@ -64,14 +64,14 @@ export const isOwner = async (req, res, next) => {
         } else if (req.query.cid) {
             const cart = await Cart.findById(req.query.cid);
 
-            if (cart.user_id === req.user.id) next();
+            if (cart !== "fail" && cart.user_id === req.user.id) next();
             else
-                next(
-                    new ExpressError(
-                        "Δεν έχετε τα απαραίτητα δικαιώματα για να πραγματοποιήσετε αυτήν την ενέργεια.",
-                        403
-                    )
-                );
+                res.status(403).send(`
+                    <div class="alert alert-danger alert-dismissible fade show border-0 position-fixed bottom-0 end-0 z-index-1 me-3 mb-5"
+                        role="alert" aria-live="assertive" aria-atomic="true">
+                        Δεν έχετε τα απαραίτητα δικαιώματα για να πραγματοποιήσετε αυτήν την ενέργεια.
+                        <button class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>`);
         } else {
             next(new ExpressError("Not found", 404));
         }

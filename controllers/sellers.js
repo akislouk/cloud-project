@@ -117,16 +117,14 @@ export const destroy = async (req, res, next) => {
                         role="alert" aria-live="assertive" aria-atomic="true">
                         Δεν έχετε τα απαραίτητα δικαιώματα για να πραγματοποιήσετε αυτήν την ενέργεια.
                         <button class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                `);
+                    </div>`);
             } else {
                 res.status(200).send(`
                     <div class="alert alert-success alert-dismissible fade show border-0 position-fixed bottom-0 end-0 z-index-1 me-3 mb-5"
                         role="alert" aria-live="polite" aria-atomic="true">
                         Το προϊόν "${req.product.name}" διαγράφηκε με επιτυχία.
                         <button class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                `);
+                    </div>`);
             }
         }
     } catch (error) {

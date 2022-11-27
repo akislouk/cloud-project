@@ -1,5 +1,4 @@
 import pool from "./db.js";
-import ExpressError from "../utils/ExpressError.js";
 
 // Product class
 class Product {

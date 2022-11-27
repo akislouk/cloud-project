@@ -138,9 +138,13 @@ export const destroy = async (req, res, next) => {
     try {
         await Cart.remove(req.query.cid);
 
-        // Sending success message and redirecting
-        req.flash("success", "Το προϊόν αφαιρέθηκε από το καλάθι σας.");
-        res.redirect("/cart.php");
+        // Sending success message
+        res.status(200).send(`
+            <div class="alert alert-success alert-dismissible fade show border-0 position-fixed bottom-0 end-0 z-index-1 me-3 mb-5"
+                role="alert" aria-live="polite" aria-atomic="true">
+                Το προϊόν αφαιρέθηκε από το καλάθι σας.
+                <button class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>`);
     } catch (error) {
         next(error);
     }

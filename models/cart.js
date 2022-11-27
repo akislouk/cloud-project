@@ -1,5 +1,4 @@
 import pool from "./db.js";
-import ExpressError from "../utils/ExpressError.js";
 
 // Cart class
 class Cart {
@@ -36,13 +35,7 @@ class Cart {
                 id,
                 (error, results, fields) => {
                     if (error) return reject(error);
-                    if (!results[0])
-                        return reject(
-                            new ExpressError(
-                                "Δεν έχετε τα απαραίτητα δικαιώματα για να πραγματοποιήσετε αυτήν την ενέργεια.",
-                                403
-                            )
-                        );
+                    if (!results[0]) return resolve("fail");
                     resolve(new Cart(results[0]));
                 }
             );
