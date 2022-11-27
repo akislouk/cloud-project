@@ -1,4 +1,5 @@
 import pool from "./db.js";
+import ExpressError from "../utils/ExpressError.js";
 
 // Product class
 class Product {
@@ -38,6 +39,7 @@ class Product {
                 `SELECT * FROM product WHERE id = ${pool.escape(id)};`,
                 (error, results, fields) => {
                     if (error) return reject(error);
+                    if (!results[0]) return resolve("fail");
                     resolve(new Product(results[0]));
                 }
             );

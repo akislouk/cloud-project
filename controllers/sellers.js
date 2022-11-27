@@ -101,14 +101,34 @@ export const update = async (req, res, next) => {
 // Deletes a product from the database
 export const destroy = async (req, res, next) => {
     try {
-        await Product.remove(req.params.pid);
+        const result = await Product.remove(req.params.pid);
 
-        // Sending success message and redirecting
-        req.flash(
-            "success",
-            `Το προϊόν "${req.product.name}" διαγράφηκε με επιτυχία.`
-        );
-        res.redirect("/seller.php");
+        // Sending success message and redirecting if the request came from the edit page
+        if (!req.query.ref) {
+            req.flash(
+                "success",
+                `Το προϊόν "${req.product.name}" διαγράφηκε με επιτυχία.`
+            );
+            res.redirect("/seller.php");
+        } else {
+            if (result === "fail") {
+                res.status(403).send(`
+                    <div class="alert alert-danger alert-dismissible fade show border-0 position-fixed bottom-0 end-0 z-index-1 me-3 mb-5"
+                        role="alert" aria-live="assertive" aria-atomic="true">
+                        Δεν έχετε τα απαραίτητα δικαιώματα για να πραγματοποιήσετε αυτήν την ενέργεια.
+                        <button class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                `);
+            } else {
+                res.status(200).send(`
+                    <div class="alert alert-success alert-dismissible fade show border-0 position-fixed bottom-0 end-0 z-index-1 me-3 mb-5"
+                        role="alert" aria-live="polite" aria-atomic="true">
+                        Το προϊόν "${req.product.name}" διαγράφηκε με επιτυχία.
+                        <button class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                `);
+            }
+        }
     } catch (error) {
         next(error);
     }

@@ -1,5 +1,5 @@
-import ExpressError from "../utils/ExpressError.js";
 import pool from "./db.js";
+import ExpressError from "../utils/ExpressError.js";
 
 // Cart class
 class Cart {

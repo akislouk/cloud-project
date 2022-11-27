@@ -45,13 +45,22 @@ export const isOwner = async (req, res, next) => {
             req.product = await Product.findById(req.params.pid);
 
             if (req.product.seller_name === req.user.username) next();
-            else
-                next(
-                    new ExpressError(
-                        "Δεν έχετε τα απαραίτητα δικαιώματα για να πραγματοποιήσετε αυτήν την ενέργεια.",
-                        403
-                    )
-                );
+            else {
+                if (!req.query.ref)
+                    next(
+                        new ExpressError(
+                            "Δεν έχετε τα απαραίτητα δικαιώματα για να πραγματοποιήσετε αυτήν την ενέργεια.",
+                            403
+                        )
+                    );
+                else
+                    res.status(403).send(`
+                        <div class="alert alert-danger alert-dismissible fade show border-0 position-fixed bottom-0 end-0 z-index-1 me-3 mb-5"
+                            role="alert" aria-live="assertive" aria-atomic="true">
+                            Δεν έχετε τα απαραίτητα δικαιώματα για να πραγματοποιήσετε αυτήν την ενέργεια.
+                            <button class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>`);
+            }
         } else if (req.query.cid) {
             const cart = await Cart.findById(req.query.cid);
 

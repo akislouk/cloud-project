@@ -31,7 +31,7 @@
             <div class="row">
                 <% if (products.length > 0) { %>
                 <% let i = 0; for (const product of products) { i++;%>
-                <div class="col-12 col-sm-6 col-md-4 my-4">
+                <div class="col-12 col-sm-6 col-md-4 my-4" id="product-<%= i %>">
                     <div class="card">
                         <a class="mb-4" href="/seller/<%= product.id %>">
                             <img class="card-img-top img-fluid" <% if (i % 3 === 0) { %>
@@ -62,11 +62,31 @@
                                     href="/seller/<%= product.id %>">
                                     Edit
                                 </a>
-                                <form action="/seller/<%= product.id %>?_method=delete"
-                                    method="POST">
+                                <form id="delete-form-<%= i %>"
+                                    action="/seller/<%= product.id %>?_method=delete" method="POST">
                                     <button class="btn btn-danger w-100 py-2">Delete</button>
                                 </form>
                             </div>
+
+                            <script>
+                                document.getElementById("delete-form-<%= i %>").addEventListener("submit", async function (event) {
+                                    event.preventDefault();
+
+                                    await fetch("http://localhost:3000/seller/<%= product.id %>?ref=index", {
+                                        method: "delete",
+                                    })
+                                        .then((res) => {
+                                            if (res.ok) document.getElementById("product-<%= i %>").remove();
+                                            return res.text();
+                                        })
+                                        .then((res) => {
+                                            const el = document.createElement("div");
+                                            el.innerHTML = res;
+                                            document.body.appendChild(el);
+                                        })
+                                        .catch((error) => console.log("error", error));
+                                })
+                            </script>
 
                             <div class="card-footer text-center text-truncate">
                                 <%= product.category %>
