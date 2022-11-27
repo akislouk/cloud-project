@@ -21,18 +21,35 @@
                 <div class="dropdown-positioner">
                     <div class="dropdown-menu dropdown-menu-dark">
                         <% if (user) { %>
-                        <a class="dropdown-item" href="/products.php">Κεντρική</a>
-                        <a class="dropdown-item" href="/cart.php">Καλάθι Αγορών</a>
+                        <a class="dropdown-item" href="/products.php">
+                            <i class="bi bi-house-fill me-1"></i> Κεντρική
+                        </a>
+                        <a class="dropdown-item" href="/cart.php">
+                            <i class="bi bi-cart-fill me-1"></i> Καλάθι Αγορών
+                        </a>
+
                         <% if (user.role === "product seller" || user.role === "admin") { %>
-                        <a class="dropdown-item" href="/seller.php">Πύλη Πωλητών</a>
+                        <a class="dropdown-item" href="/seller.php">
+                            <i class="bi bi-coin me-1"></i> Πύλη Πωλητών
+                        </a>
+
+                        <% } if (user.role === "admin") { %>
+                        <a class="dropdown-item" href="/administration.php">
+                            <i class="bi bi-people-fill me-1"></i> Διαχείριση
+                        </a>
                         <% } %>
-                        <% if (user.role === "admin") { %>
-                        <a class="dropdown-item" href="/administration.php">Διαχείριση</a>
-                        <% } %>
-                        <a class="dropdown-item" href="/logout">Αποσύνδεση</a>
+
+                        <a class="dropdown-item" href="/logout">
+                            <i class="bi bi-box-arrow-left me-1"></i> Αποσύνδεση
+                        </a>
+
                         <% } else { %>
-                        <a class="dropdown-item" href="/index.php">Σύνδεση</a>
-                        <a class="dropdown-item" href="/signup.php">Εγγραφή</a>
+                        <a class="dropdown-item" href="/index.php">
+                            <i class="bi bi-box-arrow-in-right me-1"></i> Σύνδεση
+                        </a>
+                        <a class="dropdown-item" href="/signup.php">
+                            <i class="bi bi-file-earmark-plus-fill me-1"></i> Εγγραφή
+                        </a>
                         <% } %>
                     </div>
                 </div>
