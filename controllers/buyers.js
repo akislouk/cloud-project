@@ -101,7 +101,7 @@ export const addToCart = async (req, res, next) => {
         await cart.save();
 
         // Sending success message and redirecting
-        req.flash("success", "Το προϊόν προστέθηκε στο καλάθι σας.");
+        req.flash("cart", "success");
         res.redirect("/products.php");
     } catch (error) {
         next(error);

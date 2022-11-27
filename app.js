@@ -71,12 +71,12 @@ app.use(async (req, res, next) => {
     next();
 });
 
-// Passing some stuff to the frontend
+// Sending the user's info and flash messages to the frontend
 app.use((req, res, next) => {
     res.locals.user = req.user;
-    res.locals.query = req.query;
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
+    res.locals.cart = req.flash("cart");
     next();
 });
 
