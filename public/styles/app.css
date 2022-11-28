@@ -11,22 +11,38 @@ html {
         "Noto Color Emoji";
 }
 
-div.toast {
-    --bs-toast-max-width: 450px;
+body.bg-img {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+        url("../images/background.jpg");
+    background-size: cover;
+    background-position: center;
 }
 
-@media (max-width: 490px) {
+div.toast {
+    --bs-toast-max-width: 400px;
+}
+
+@media (max-width: 450px) {
     div.toast {
         --bs-toast-max-width: 100%;
         margin-right: 0 !important;
     }
 }
 
-body.bg-img {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-        url("../images/background.jpg");
-    background-size: cover;
-    background-position: center;
+.modal .btn-close {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+}
+
+a#empty {
+    font-size: 150px;
+    line-height: 0.8;
+}
+
+.bi-currency-euro,
+.bi-eye {
+    line-height: 0.8;
 }
 
 .hr-sm {
@@ -52,22 +68,6 @@ body.bg-img {
 
 .z-index-1 {
     z-index: 1;
-}
-
-.modal .btn-close {
-    position: absolute;
-    right: 1rem;
-    top: 1rem;
-}
-
-a#empty {
-    font-size: 150px;
-    line-height: 0.8;
-}
-
-.bi-currency-euro,
-.bi-eye {
-    line-height: 0.8;
 }
 
 /*******************************

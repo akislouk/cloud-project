@@ -3,19 +3,23 @@ const navbarReveal = document.querySelector(".navbar-reveal");
 const windowEvents = ["load", "scroll"];
 let windowScroll = window.pageYOffset;
 
-windowEvents.forEach((e) => {
-    window.addEventListener(e, () => {
-        const currentScroll = window.pageYOffset;
-        const navbarOffset =
-            windowScroll < currentScroll && currentScroll > 0 ? "-100%" : "0";
-        const navbarCollapse = navbarReveal.querySelector(".navbar-collapse");
+if (navbarReveal)
+    windowEvents.forEach((e) => {
+        window.addEventListener(e, () => {
+            const currentScroll = window.pageYOffset;
+            const navbarOffset =
+                windowScroll < currentScroll && currentScroll > 0
+                    ? "-100%"
+                    : "0";
+            const navbarCollapse =
+                navbarReveal.querySelector(".navbar-collapse");
 
-        if (!navbarCollapse.classList.contains("show"))
-            navbarReveal.style.transform = `translateY(${navbarOffset})`;
+            if (!navbarCollapse.classList.contains("show"))
+                navbarReveal.style.transform = `translateY(${navbarOffset})`;
 
-        windowScroll = currentScroll;
+            windowScroll = currentScroll;
+        });
     });
-});
 
 // Popper.js dropdown on hover functionality
 const drops = document.querySelectorAll(".navbar-nav .dropdown, .navbar-nav");
