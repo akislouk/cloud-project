@@ -55,11 +55,19 @@ export const isOwner = async (req, res, next) => {
                     );
                 else
                     res.status(403).send(`
-                        <div class="alert alert-danger alert-dismissible fade show border-0 position-fixed bottom-0 end-0 z-index-1 me-3 mb-5"
+                        <div class="toast align-items-center text-bg-danger fade show border-0 position-fixed bottom-0 end-0 z-index-1 me-3 mb-5"
                             role="alert" aria-live="assertive" aria-atomic="true">
-                            Δεν έχετε τα απαραίτητα δικαιώματα για να πραγματοποιήσετε αυτήν την ενέργεια.
-                            <button class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>`);
+                            <div class="d-flex justify-content-between fs-6">
+                                <div class="toast-body">
+                                    Δεν έχετε τα απαραίτητα δικαιώματα για να πραγματοποιήσετε αυτήν την ενέργεια.
+                                </div>
+                                <div class="toast-body d-flex">
+                                    <button class="btn-close btn-close-white mb-auto" data-bs-dismiss="toast" type="button"
+                                        aria-label="Close"></button>
+                                </div>
+                            </div>
+                        </div>
+                        <script src="/scripts/toast.js" type="module"></script>`);
             }
         } else if (req.query.cid) {
             const cart = await Cart.findById(req.query.cid);
@@ -67,11 +75,19 @@ export const isOwner = async (req, res, next) => {
             if (cart !== "fail" && cart.user_id === req.user.id) next();
             else
                 res.status(403).send(`
-                    <div class="alert alert-danger alert-dismissible fade show border-0 position-fixed bottom-0 end-0 z-index-1 me-3 mb-5"
-                        role="alert" aria-live="assertive" aria-atomic="true">
-                        Δεν έχετε τα απαραίτητα δικαιώματα για να πραγματοποιήσετε αυτήν την ενέργεια.
-                        <button class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>`);
+                <div class="toast align-items-center text-bg-danger fade show border-0 position-fixed bottom-0 end-0 z-index-1 me-3 mb-5"
+                    role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex justify-content-between fs-6">
+                        <div class="toast-body">
+                            Δεν έχετε τα απαραίτητα δικαιώματα για να πραγματοποιήσετε αυτήν την ενέργεια.
+                        </div>
+                        <div class="toast-body d-flex">
+                            <button class="btn-close btn-close-white mb-auto" data-bs-dismiss="toast" type="button"
+                                aria-label="Close"></button>
+                        </div>
+                    </div>
+                </div>
+                <script src="/scripts/toast.js" type="module"></script>`);
         } else {
             next(new ExpressError("Not found", 404));
         }

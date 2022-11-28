@@ -11,15 +11,34 @@
             <i class="bi bi-person-circle ms-1"></i>
         </a>
 
-        <div class="navbar-nav justify-content-end w-100 d-none d-lg-flex">
+        <div class="collapse navbar-collapse" id="navbar-content">
+            <div class="navbar-nav nav-dark justify-content-end w-100 d-lg-none">
+                <% if (user) { %>
+                <a class="nav-link" href="/cart.php">Καλάθι Αγορών</a>
+                <a class="nav-link" href="/products.php">Προϊόντα</a>
+                <% if (user.role === "product seller" || user.role === "admin") { %>
+                <a class="nav-link" href="/seller.php">Πύλη Πωλητών</a>
+                <% } %>
+                <% if (user.role === "admin") { %>
+                <a class="nav-link" href="/administration.php">Χρήστες</a>
+                <% } %>
+                <a class="nav-link" href="/logout">Αποσύνδεση</a>
+                <% } else { %>
+                <a class="nav-link" href="/index.php">Σύνδεση</a>
+                <a class="nav-link" href="/signup.php">Εγγραφή</a>
+                <% } %>
+            </div>
+        </div>
+
+        <div class="navbar-nav d-none d-lg-block">
             <div class="nav-item dropdown">
-                <a class="nav-divnk dropdown-toggle navbar-brand me-0" role="button" href="#"
+                <a class="nav-link navbar-brand dropdown-toggle me-0 px-0" role="button" href="#"
                     aria-haspopup="true" aria-expanded="false">
                     <%= user ? `${user.name} ${user.surname} (${user.role})` : "Λογαριασμός" %>
                     <i class="bi bi-person-circle ms-1"></i>
                 </a>
                 <div class="dropdown-positioner">
-                    <div class="dropdown-menu dropdown-menu-dark">
+                    <div class="dropdown-menu">
                         <% if (user) { %>
                         <a class="dropdown-item" href="/products.php">
                             <i class="bi bi-house-fill me-1"></i> Κεντρική
@@ -53,25 +72,6 @@
                         <% } %>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <div class="collapse navbar-collapse" id="navbar-content">
-            <div class="navbar-nav justify-content-end w-100 d-lg-none">
-                <% if (user) { %>
-                <a class="nav-link" href="/cart.php">Καλάθι Αγορών</a>
-                <a class="nav-link" href="/products.php">Προϊόντα</a>
-                <% if (user.role === "product seller" || user.role === "admin") { %>
-                <a class="nav-link" href="/seller.php">Πύλη Πωλητών</a>
-                <% } %>
-                <% if (user.role === "admin") { %>
-                <a class="nav-link" href="/administration.php">Χρήστες</a>
-                <% } %>
-                <a class="nav-link" href="/logout">Αποσύνδεση</a>
-                <% } else { %>
-                <a class="nav-link" href="/index.php">Σύνδεση</a>
-                <a class="nav-link" href="/signup.php">Εγγραφή</a>
-                <% } %>
             </div>
         </div>
     </div>

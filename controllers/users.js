@@ -175,11 +175,19 @@ export const destroy = async (req, res, next) => {
                 res.redirect("/administration.php");
             } else {
                 res.status(200).send(`
-                    <div class="alert alert-success alert-dismissible fade show border-0 position-fixed bottom-0 end-0 z-index-1 me-3 mb-5"
-                        role="alert" aria-live="polite" aria-atomic="true">
-                        Ο χρήστης διαγράφηκε διαγράφηκε με επιτυχία.
-                        <button class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <div class="toast align-items-center text-bg-success fade show border-0 position-fixed bottom-0 end-0 z-index-1 me-3 mb-5"
+                        role="status" aria-live="polite" aria-atomic="true">
+                        <div class="d-flex justify-content-between fs-6">
+                            <div class="toast-body">
+                                Ο χρήστης διαγράφηκε διαγράφηκε με επιτυχία.
+                            </div>
+                            <div class="toast-body d-flex">
+                                <button class="btn-close btn-close-white mb-auto" data-bs-dismiss="toast" type="button"
+                                    aria-label="Close"></button>
+                            </div>
+                        </div>
                     </div>
+                    <script src="/scripts/toast.js" type="module"></script>
                 `);
             }
         }

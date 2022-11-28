@@ -1,25 +1,33 @@
-// Selectors
-const drops = document.querySelectorAll(
-    ".navbar-nav .dropdown, .navbar-nav .dropend"
-);
+// Reveal navbar when scrolling
+const navbarReveal = document.querySelector(".navbar-reveal");
+const windowEvents = ["load", "scroll"];
+let windowScroll = window.pageYOffset;
+
+windowEvents.forEach((e) => {
+    window.addEventListener(e, () => {
+        const currentScroll = window.pageYOffset;
+        const navbarOffset =
+            windowScroll < currentScroll && currentScroll > 0 ? "-100%" : "0";
+        const navbarCollapse = navbarReveal.querySelector(".navbar-collapse");
+
+        if (!navbarCollapse.classList.contains("show"))
+            navbarReveal.style.transform = `translateY(${navbarOffset})`;
+
+        windowScroll = currentScroll;
+    });
+});
+
+// Popper.js dropdown on hover functionality
+const drops = document.querySelectorAll(".navbar-nav .dropdown, .navbar-nav");
 const toggles = document.querySelectorAll(".navbar-nav .dropdown-toggle");
 const collapses = document.querySelectorAll(".navbar-collapse");
 
-// Transition
 const transitionDuration = 200;
-
-// Positioner
 const overflowPadding = 16;
-
-// Breakpoint
 const desktopSize = 992;
 
-// Show drop
 function showDrop(e, menu) {
-    if (window.innerWidth < desktopSize) {
-        return;
-    }
-
+    if (window.innerWidth < desktopSize) return;
     menu.classList.add("showing");
 
     setTimeout(() => {
@@ -30,68 +38,44 @@ function showDrop(e, menu) {
     positionDrop(menu);
 }
 
-// Hide drop
 function hideDrop(e, menu) {
-    if (window.innerWidth < desktopSize) {
-        return;
-    }
-
-    if (!menu.classList.contains("show")) {
-        return;
-    }
-
-    if (e.type === "click" && e.target.closest(".dropdown-menu form")) {
-        return;
-    }
+    if (window.innerWidth < desktopSize) return;
+    if (!menu.classList.contains("show")) return;
+    if (e.type === "click" && e.target.closest(".dropdown-menu form")) return;
 
     menu.classList.add("showing");
     menu.classList.remove("show");
 
-    setTimeout(() => {
-        menu.classList.remove("showing");
-    }, transitionDuration);
+    setTimeout(() => menu.classList.remove("showing"), transitionDuration);
 }
 
-// Toggle drop
 function toggleDrop(e, menu) {
     e.preventDefault();
 
-    if (window.innerWidth >= desktopSize) {
-        return;
-    }
+    if (window.innerWidth >= desktopSize) return;
 
     const parentElement = menu.parentElement;
     const parentMenu = parentElement.closest(".navbar, .navbar .dropdown-menu");
     const siblingMenus = parentMenu.querySelectorAll(".dropdown-menu");
 
     siblingMenus.forEach((el) => {
-        if (el !== menu) {
-            el.classList.remove("show");
-        }
+        if (el !== menu) el.classList.remove("show");
     });
 
     menu.classList.toggle("show");
 }
 
-// Hide menus
 function hideMenus(menus) {
-    if (window.innerWidth >= desktopSize) {
-        return;
-    }
-
-    menus.forEach((menu) => {
-        menu.classList.remove("show");
-    });
+    if (window.innerWidth >= desktopSize) return;
+    menus.forEach((menu) => menu.classList.remove("show"));
 }
 
-// Position drop
 function positionDrop(menu) {
     const positioner = menu.parentElement;
     const drop = positioner.parentElement;
 
-    const isDropright = drop.classList.contains("dropend");
-    const menuOffset = isDropright ? [-32, 0] : [0, 0];
-    const menuPlacement = isDropright ? "right-start" : "auto";
+    const menuOffset = [0, 0];
+    const menuPlacement = "auto";
 
     Popper.createPopper(drop, positioner, {
         placement: menuPlacement,
@@ -112,38 +96,20 @@ function positionDrop(menu) {
     });
 }
 
-//
-// Listeners
-//
-
 drops.forEach((dropdown) => {
     const menu = dropdown.querySelector(".dropdown-menu");
-
-    // Show drop
-    dropdown.addEventListener("mouseenter", (e) => {
-        showDrop(e, menu);
-    });
-
-    // Hide drop
-    dropdown.addEventListener("mouseleave", (e) => {
-        hideDrop(e, menu);
-    });
+    dropdown.addEventListener("mouseenter", (e) => showDrop(e, menu));
+    dropdown.addEventListener("mouseleave", (e) => hideDrop(e, menu));
 });
 
 toggles.forEach((toggle) => {
     const menu = toggle.parentElement.querySelector(".dropdown-menu");
-
-    // Toggle drop (mobile)
-    toggle.addEventListener("click", (e) => {
-        toggleDrop(e, menu);
-    });
+    toggle.addEventListener("click", (e) => toggleDrop(e, menu));
 });
 
 collapses.forEach((collapse) => {
     collapse.addEventListener("hide.bs.collapse", () => {
         const menus = collapse.querySelectorAll(".dropdown-menu");
-
-        // Hide menus
         hideMenus(menus);
     });
 });
