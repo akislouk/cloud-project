@@ -58,13 +58,16 @@
                             </h5>
 
                             <div class="mx-3 mb-3">
-                                <a class="btn btn-primary w-100 mb-3"
+                                <a class="btn btn-primary d-flex justify-content-between w-100 mb-3"
                                     href="/seller/<%= product.id %>">
-                                    Edit
+                                    Επεξεργασία <i class="bi bi-pencil-fill"></i>
                                 </a>
                                 <form id="delete-form-<%= i %>"
                                     action="/seller/<%= product.id %>?_method=delete" method="POST">
-                                    <button class="btn btn-danger w-100">Delete</button>
+                                    <button
+                                        class="btn btn-danger d-flex justify-content-between w-100">
+                                        Διαγραφή <i class="bi bi-trash-fill"></i>
+                                    </button>
                                 </form>
                             </div>
 
