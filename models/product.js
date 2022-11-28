@@ -1,6 +1,6 @@
 import pool from "./db.js";
 
-// Product class
+// The product class
 class Product {
     constructor(product) {
         this.id = product.id || null;

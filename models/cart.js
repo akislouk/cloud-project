@@ -1,6 +1,6 @@
 import pool from "./db.js";
 
-// Cart class
+// The cart class
 class Cart {
     constructor(cart) {
         this.id = cart.id || null;
