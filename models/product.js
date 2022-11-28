@@ -35,7 +35,8 @@ class Product {
     static findById = async (id) =>
         new Promise((resolve, reject) => {
             pool.query(
-                `SELECT * FROM product WHERE id = ${pool.escape(id)};`,
+                "SELECT * FROM product WHERE id = ?",
+                id,
                 (error, results, fields) => {
                     if (error) return reject(error);
                     if (!results[0]) return resolve("fail");
@@ -48,7 +49,8 @@ class Product {
     static findByUsername = async (username) =>
         new Promise((resolve, reject) => {
             pool.query(
-                `SELECT * FROM product WHERE seller_name = '${username}';`,
+                "SELECT * FROM product WHERE seller_name = ?",
+                username,
                 (error, results, fields) => {
                     if (error) return reject(error);
                     resolve(results);
@@ -60,7 +62,8 @@ class Product {
     static remove = async (id) =>
         new Promise((resolve, reject) => {
             pool.query(
-                `DELETE FROM product WHERE id = ${id};`,
+                "DELETE FROM product WHERE id = ?",
+                id,
                 (error, results, fields) => {
                     if (error) return reject(error);
                     resolve(results);

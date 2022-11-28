@@ -1,4 +1,6 @@
 import Product from "../models/product.js";
+import { newProductSchema, editProductSchema } from "../schemas.js";
+import ExpressError from "../utils/ExpressError.js";
 
 export const seller = (req, res) => res.redirect("/seller.php");
 export const index = async (req, res, error) => {
@@ -22,17 +24,21 @@ export const index = async (req, res, error) => {
 export const newForm = (req, res) =>
     res.render("sellers/new", { title: "Νέο Προϊόν" });
 
+// Validates the request body
+export const validateNewProduct = (req, res, next) => {
+    req.body.price = req.body.price.replace(",", ".");
+    const { error } = newProductSchema.validate(req.body);
+    if (error) {
+        const msg = error.details.map((el) => el.message).join(",");
+        throw new ExpressError(msg, 400);
+    } else next();
+};
+
 // Creates the new product and saves it to the database
 export const create = async (req, res, next) => {
     try {
         // Deconstructing the request body
-        const { name, product_code, category } = req.body;
-
-        // Changing the format to match the format in the database
-        const price = new Intl.NumberFormat("en-US", {
-            maximumFractionDigits: 2,
-            useGrouping: false,
-        }).format(req.body.price.replace(",", "."));
+        const { name, product_code, price, category } = req.body;
 
         // Using the Product class constructor to create the new product
         const product = new Product({
@@ -67,19 +73,21 @@ export const edit = async (req, res, next) => {
     }
 };
 
+// Validates the request body
+export const validateProduct = (req, res, next) => {
+    req.body.price = req.body.price.replace(",", ".");
+    const { error } = editProductSchema.validate(req.body);
+    if (error) {
+        const msg = error.details.map((el) => el.message).join(",");
+        throw new ExpressError(msg, 400);
+    } else next();
+};
+
 // Updates the product in the database
 export const update = async (req, res, next) => {
     try {
         // Deconstructing the request body
-        const { name, product_code, category } = req.body;
-        let price = req.body.price;
-
-        // Changing the format to match the format in the database
-        price &&
-            (price = new Intl.NumberFormat("en-US", {
-                maximumFractionDigits: 2,
-                useGrouping: false,
-            }).format(req.body.price.replace(",", ".")));
+        const { name, product_code, price, category } = req.body;
 
         // Updating the product details if any new values are given
         name && (req.product.name = name);

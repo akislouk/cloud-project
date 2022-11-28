@@ -1,19 +1,20 @@
 <nav
     class="navbar navbar-expand-lg navbar-dark <% if (!(["Εγγραφή", "Αρχική", "Σύνδεση"].includes(title))) { %>bg-dark <% } if (["Εγγραφή", "Αρχική", "Σύνδεση", "Σφάλμα"].includes(title)) { %>mb-n66<% } else { %>navbar-reveal fixed-top<% } %>">
     <div class="container-fluid mx-0">
-        <a class="navbar-brand" href="/<%= user ? "products" : "index" %>.php">
+        <a class="navbar-brand"
+            href="/<%= typeof user !== "undefined" && user ? "products" : "index" %>.php">
             Cloud Project
         </a>
 
         <a class="navbar-brand d-lg-none me-0" data-bs-toggle="collapse" href="#navbar-content"
             aria-controls="navbar-content" aria-expanded="false" aria-label="Toggle navigation">
-            <%= user ? `${user.name} ${user.surname} (${user.role})` : "Λογαριασμός" %>
+            <%= typeof user !== "undefined" && user ? `${user.name} ${user.surname} (${user.role})` : "Λογαριασμός" %>
             <i class="bi bi-person-circle ms-1"></i>
         </a>
 
         <div class="collapse navbar-collapse" id="navbar-content">
             <div class="navbar-nav nav-dark justify-content-end w-100 d-lg-none">
-                <% if (user) { %>
+                <% if (typeof user !== "undefined" && user) { %>
                 <a class="nav-link" href="/cart.php">Καλάθι Αγορών</a>
                 <a class="nav-link" href="/products.php">Προϊόντα</a>
                 <% if (user.role === "product seller" || user.role === "admin") { %>
@@ -34,12 +35,12 @@
             <div class="nav-item dropdown">
                 <a class="nav-link navbar-brand dropdown-toggle me-0 px-0" role="button" href="#"
                     aria-haspopup="true" aria-expanded="false">
-                    <%= user ? `${user.name} ${user.surname} (${user.role})` : "Λογαριασμός" %>
+                    <%= typeof user !== "undefined" && user ? `${user.name} ${user.surname} (${user.role})` : "Λογαριασμός" %>
                     <i class="bi bi-person-circle ms-1"></i>
                 </a>
                 <div class="dropdown-positioner">
                     <div class="dropdown-menu">
-                        <% if (user) { %>
+                        <% if (typeof user !== "undefined" && user) { %>
                         <a class="dropdown-item" href="/products.php">
                             <i class="bi bi-house-fill me-1"></i> Κεντρική
                         </a>

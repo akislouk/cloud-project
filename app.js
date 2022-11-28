@@ -44,7 +44,7 @@ const store = new (MySQLStore(session))({
     host: process.env.DB_HOST || "localhost",
     port: process.env.DB_PORT || 3306,
     user: process.env.DB_USER || "root",
-    password: process.env.DB_PASS || "akis11",
+    password: process.env.DB_PASS || "root",
     database: process.env.DB_SESSION || "session",
 });
 store.on("error", (error) => console.log("Store error ", error));
@@ -59,6 +59,7 @@ const sessionConfig = {
     saveUninitialized: false,
     cookie: {
         httpOnly: true,
+        sameSite: "strict",
         expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
         maxAge: 1000 * 60 * 60 * 24 * 7,
     },

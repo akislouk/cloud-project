@@ -1,4 +1,5 @@
 import User from "../models/user.js";
+import { newUserSchema, editUserSchema } from "../schemas.js";
 import ExpressError from "../utils/ExpressError.js";
 const { scrypt, webcrypto } = await import("node:crypto");
 
@@ -39,6 +40,15 @@ export const login = async (req, res, next) => {
 export const register = (req, res) => res.redirect("/signup.php");
 export const signup = (req, res) =>
     res.render("users/signup", { title: "Εγγραφή" });
+
+// Validates the request body
+export const validateNewUser = (req, res, next) => {
+    const { error } = newUserSchema.validate(req.body);
+    if (error) {
+        const msg = error.details.map((el) => el.message).join(",");
+        throw new ExpressError(msg, 400);
+    } else next();
+};
 
 // Creates the new user and saves them to the database
 export const create = async (req, res, next) => {
@@ -125,6 +135,15 @@ export const edit = async (req, res, next) => {
     }
 };
 
+// Validates the request body
+export const validateUser = (req, res, next) => {
+    const { error } = editUserSchema.validate(req.body);
+    if (error) {
+        const msg = error.details.map((el) => el.message).join(",");
+        throw new ExpressError(msg, 400);
+    } else next();
+};
+
 // Updates the user in the database
 export const update = async (req, res, next) => {
     try {
@@ -143,7 +162,7 @@ export const update = async (req, res, next) => {
         username && (user.username = username);
         email && (user.email = email);
         role && (user.role = role);
-        confirmed && (user.confirmed = parseInt(confirmed));
+        confirmed && (user.confirmed = confirmed);
 
         // Updating the user in the database
         await user.update();

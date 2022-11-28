@@ -15,6 +15,8 @@ import {
     edit,
     update,
     destroy,
+    validateNewUser,
+    validateUser,
 } from "../controllers/users.js";
 
 const router = Router();
@@ -22,9 +24,14 @@ router.route("/").get(home);
 router.route("/login").get(home);
 router.route("/index").get(home);
 router.route("/index.php").get(index).post(catchAsync(login));
+
 router.route("/register").get(register);
 router.route("/signup").get(register);
-router.route("/signup.php").get(signup).post(catchAsync(create));
+router
+    .route("/signup.php")
+    .get(signup)
+    .post(validateNewUser, catchAsync(create));
+
 router.route("/welcome.php").get(isLoggedIn, welcome);
 router.route("/logout").get(isLoggedIn, logout);
 
@@ -34,7 +41,7 @@ router.route("/administration.php").get(isLoggedIn, isAdmin, catchAsync(show));
 router
     .route("/administration/:uid")
     .get(isLoggedIn, isAdmin, catchAsync(edit))
-    .put(isLoggedIn, isAdmin, catchAsync(update))
+    .put(isLoggedIn, isAdmin, validateUser, catchAsync(update))
     .delete(isLoggedIn, isAdmin, catchAsync(destroy));
 
 export default router;

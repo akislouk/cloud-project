@@ -1,4 +1,4 @@
-<% if (success && success.length) { %>
+<% if (typeof success !== "undefined" && success && success.length) { %>
 <div class="toast align-items-center text-bg-success fade show border-0 position-fixed bottom-0 end-0 z-index-1 me-3 mb-5"
     role="status" aria-live="polite" aria-atomic="true">
     <div class="d-flex justify-content-between fs-6">
@@ -13,7 +13,7 @@
 </div>
 <script src="/scripts/toast.js" type="module"></script>
 
-<% } if (error && error.length) { %>
+<% } if (typeof error !== "undefined" && error && error.length) { %>
 <div class="toast align-items-center text-bg-danger fade show border-0 position-fixed bottom-0 end-0 z-index-1 me-3 mb-5"
     role="alert" aria-live="assertive" aria-atomic="true">
     <div class="d-flex justify-content-between fs-6">

@@ -22,16 +22,16 @@ class User {
                 `\
                 INSERT INTO user (name, surname, username, salt, hash, email, role)
                 SELECT
-                    ${pool.escape(this.name)},
-                    ${pool.escape(this.surname)},
+                    '${this.name}',
+                    '${this.surname}',
                     ${pool.escape(this.username)},
                     '${this.salt}',
                     UNHEX('${this.hash}'),
                     ${pool.escape(this.email)},
-                    ${pool.escape(this.role)};`,
+                    '${this.role}';`,
                 (error, results, fields) => {
                     if (error) return reject(error);
-                    resolve(results[0]);
+                    resolve(results);
                 }
             );
         });
@@ -42,11 +42,11 @@ class User {
             pool.query(
                 `UPDATE user
                 SET
-                    name = ${pool.escape(this.name)},
-                    surname = ${pool.escape(this.surname)},
+                    name = '${this.name}',
+                    surname = '${this.surname}',
                     username = ${pool.escape(this.username)},
                     email = ${pool.escape(this.email)},
-                    role = ${pool.escape(this.role)},
+                    role = '${this.role}',
                     confirmed = ${this.confirmed}
                 WHERE ID = ?;`,
                 this.id,

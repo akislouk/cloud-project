@@ -13,7 +13,7 @@
                     <div class="input-group mb-4">
                         <div class="form-group form-floating text-start mb-0">
                             <input class="form-control" id="name" name="name" type="text"
-                                placeholder="Όνομα" pattern="[\p{L} ,.'’-]{0,50}$" required
+                                placeholder="Όνομα" pattern="[\p{L} ,.'’-]{0,50}" required
                                 oninput="fullNameValidate()">
                             <label class="text-muted opacity-100" for="name">
                                 Όνομα
@@ -22,7 +22,7 @@
 
                         <div class="form-group form-floating text-start mb-0">
                             <input class="form-control" id="surname" name="surname" type="text"
-                                placeholder="Επώνυμο" pattern="[\p{L} ,.'’-]{0,50}$" required
+                                placeholder="Επώνυμο" pattern="[\p{L} ,.'’-]{0,50}" required
                                 oninput="fullNameValidate()">
                             <label class="text-muted opacity-100" for="surname">
                                 Επώνυμο
@@ -49,8 +49,8 @@
                     <div class="input-group mb-4">
                         <div class="form-floating text-start">
                             <input class="form-control" id="password" name="password"
-                                placeholder="Κωδικός" type="password" minlength="4" maxlength="20"
-                                required aria-label="Κωδικός" aria-describedby="password-caption"
+                                placeholder="Κωδικός" type="password" pattern="[\S ]{4,20}" required
+                                aria-label="Κωδικός" aria-describedby="password-caption"
                                 aria-required="true" oninput="passwordValidate()">
                             <label class="text-muted opacity-100" for="password">
                                 Κωδικός
@@ -61,7 +61,7 @@
                             <i class="bi bi-eye"></i>
                         </a>
                         <div class="invalid-feedback text-start" id="password-error">
-                            Παρακαλώ εισάγετε έναν κωδικό με 4-20 χαρακτήρες.
+                            Παρακαλώ εισάγετε έναν κωδικό 4-20 χαρακτήρες.
                         </div>
                     </div>
 
