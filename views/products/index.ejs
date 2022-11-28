@@ -142,12 +142,10 @@
                             </h5>
 
                             <div class="mx-3 mb-3">
-                                <form action="/products.php?pid=<%= product.id %>" method="POST">
-                                    <button
-                                        class="btn btn-primary d-flex justify-content-between w-100">
-                                        Αγορά <i class="bi bi-cart-fill"></i>
-                                    </button>
-                                </form>
+                                <button class="btn btn-primary d-flex justify-content-between w-100"
+                                    id="btn-<%= i %>" type="button">
+                                    Αγορά <i class="bi bi-cart-fill"></i>
+                                </button>
                             </div>
 
                             <div class="card-footer text-center text-truncate">
@@ -156,6 +154,21 @@
                         </div>
                     </div>
                 </div>
+
+                <script>
+                    document.getElementById("btn-<%= i %>").addEventListener("click", async function (event) {
+                        event.preventDefault();
+
+                        await fetch("http://localhost:3000/products.php?pid=<%= product.id %>", { method: "post" })
+                            .then((res) => res.text())
+                            .then((res) => {
+                                const el = document.createElement("div");
+                                el.innerHTML = res;
+                                document.body.appendChild(el);
+                            });
+                    })
+                </script>
+
                 <% }} else { %>
                 <p class="text-muted text-center">
                     Δε βρέθηκε κανένα προϊόν.

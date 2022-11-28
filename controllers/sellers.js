@@ -111,7 +111,7 @@ export const destroy = async (req, res, next) => {
             );
             res.redirect("/seller.php");
         } else {
-            if (result === "fail") {
+            if (result === "fail")
                 res.status(403).send(`
                     <div class="toast align-items-center text-bg-danger fade show border-0 position-fixed bottom-0 end-0 z-index-1 me-3 mb-5"
                         role="alert" aria-live="assertive" aria-atomic="true">
@@ -126,7 +126,7 @@ export const destroy = async (req, res, next) => {
                         </div>
                     </div>
                     <script src="/scripts/toast.js" type="module"></script>`);
-            } else {
+            else
                 res.status(200).send(`
                     <div class="toast align-items-center text-bg-success fade show border-0 position-fixed bottom-0 end-0 z-index-1 me-3 mb-5"
                         role="status" aria-live="polite" aria-atomic="true">
@@ -141,7 +141,6 @@ export const destroy = async (req, res, next) => {
                         </div>
                     </div>
                     <script src="/scripts/toast.js" type="module"></script>`);
-            }
         }
     } catch (error) {
         next(error);

@@ -22,7 +22,7 @@ class Cart {
                 this,
                 (error, results, fields) => {
                     if (error) return reject(error);
-                    resolve(results[0]);
+                    resolve(results);
                 }
             );
         });

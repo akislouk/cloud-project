@@ -98,11 +98,41 @@ export const addToCart = async (req, res, next) => {
         });
 
         // Saving the cart to the database
-        await cart.save();
-
-        // Sending success message and redirecting
-        req.flash("cart", "success");
-        res.redirect("/products.php");
+        await cart
+            .save()
+            .then((result) =>
+                res.status(200).send(`\
+                    <div class="toast align-items-center text-bg-success fade show border-0 position-fixed bottom-0 end-0 z-index-1 me-3 mb-5"
+                        role="status" aria-live="polite" aria-atomic="true">
+                        <div class="d-flex justify-content-between fs-6">
+                            <div class="toast-body">
+                                Το προϊόν προστέθηκε στο <a class="text-reset" href="/cart.php">καλάθι</a> σας.
+                            </div>
+                            <div class="toast-body d-flex">
+                                <button class="btn-close btn-close-white mb-auto" data-bs-dismiss="toast" type="button"
+                                    aria-label="Close"></button>
+                            </div>
+                        </div>
+                    </div>
+                    <script src="/scripts/toast.js" type="module"></script>`)
+            )
+            .catch((error) =>
+                res.status(500).send(`\
+                    <div class="toast align-items-center text-bg-danger fade show border-0 position-fixed bottom-0 end-0 z-index-1 me-3 mb-5"
+                        role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="d-flex justify-content-between fs-6">
+                            <div class="toast-body">
+                                Κάτι πήγε στραβά. <br>
+                                ${error}
+                            </div>
+                            <div class="toast-body d-flex">
+                                <button class="btn-close btn-close-white mb-auto" data-bs-dismiss="toast" type="button"
+                                    aria-label="Close"></button>
+                            </div>
+                        </div>
+                    </div>
+                    <script src="/scripts/toast.js" type="module"></script>`)
+            );
     } catch (error) {
         next(error);
     }
