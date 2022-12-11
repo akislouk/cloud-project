@@ -1,6 +1,7 @@
-// Third-party imports
 import dotenv from "dotenv";
 if (process.env.NODE_ENV !== "production") dotenv.config();
+
+// Third-party imports
 import express from "express";
 import ejsMate from "ejs-mate";
 import methodOverride from "method-override";
