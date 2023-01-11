@@ -1,0 +1,26 @@
+version: "3.4"
+
+services:
+  mysql-db:
+    restart: always
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: project
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql-db:/var/lib/mysql
+  app:
+    depends_on:
+      - mysql-db
+    restart: always
+    image: app
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 80:80
+
+volumes:
+  mysql-db: ~

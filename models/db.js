@@ -1,5 +1,5 @@
 import "../config.js";
-import { createConnection, createPool } from "mysql2";
+import { createConnection, createPool } from "mysql";
 
 const pool = createPool({
     host: process.env.DB_HOST || "localhost",
