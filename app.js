@@ -1,5 +1,5 @@
-import dotenv from "dotenv";
-if (process.env.NODE_ENV !== "production") dotenv.config();
+// dotenv config import
+import "./config.js";
 
 // Third-party imports
 import express from "express";
