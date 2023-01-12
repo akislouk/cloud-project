@@ -6,8 +6,10 @@ import express from "express";
 import ejsMate from "ejs-mate";
 import methodOverride from "method-override";
 import session from "express-session";
-import MySQLStore from "express-mysql-session";
 import flash from "connect-flash";
+import MySQLStore from "express-mysql-session";
+import { connect, connections, set } from "mongoose";
+import mongoSanitize from "express-mongo-sanitize";
 
 // Node imports
 import { fileURLToPath } from "url";
@@ -21,10 +23,19 @@ import usersRoutes from "./routes/users.js";
 import productsRoutes from "./routes/products.js";
 import sellersRoutes from "./routes/sellers.js";
 
-// Initializing the database. In a real app this would be replaced by
+// Initializing the MySQL database. In a real app this would be replaced by
 // a simple query to test the connection to the database
 init();
 
+// Connecting to MongoDB
+const dbUrl = process.env.DB_URL || "mongodb://0.0.0.0:27017/app";
+set("strictQuery", true);
+connect(dbUrl);
+const db = connections[0];
+db.on("error", console.error.bind(console, "MongoDB connection error:"));
+db.once("open", () => console.log("MongoDB connected"));
+
+// Creating the Express application
 const app = express();
 
 // Getting the root folder in file URL format
@@ -39,6 +50,7 @@ app.set("views", join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(join(__dirname, "public"))); // Setting the static content folder
 app.use(methodOverride("_method")); // Setting the parameter that will be used to override request methods
+app.use(mongoSanitize({ replaceWith: "_" })); // Replacing "dangerous" characters from incoming requests
 
 // Setting up the session database
 const store = new (MySQLStore(session))({
@@ -46,7 +58,7 @@ const store = new (MySQLStore(session))({
     port: process.env.DB_PORT || 3306,
     user: process.env.DB_USER || "root",
     password: process.env.DB_PASS || "root",
-    database: process.env.DB_SESSION || "session",
+    database: process.env.DB_NAME || "project",
 });
 store.on("error", (error) => console.log("Store error ", error));
 

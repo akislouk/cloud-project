@@ -1,15 +1,14 @@
-import "../config.js";
-import { createConnection, createPool } from "mysql";
+import { createConnection, createPool } from "mysql2";
 
 const pool = createPool({
     host: process.env.DB_HOST || "localhost",
     port: process.env.DB_PORT || 3306,
     user: process.env.DB_USER || "root",
     password: process.env.DB_PASS || "root",
-    database: process.env.DB || "project",
+    database: process.env.DB_NAME || "project",
 });
 
-pool.on("error", console.error.bind(console, "Connection error: "));
+pool.on("error", console.error.bind(console, "MySQL Connection error: "));
 
 export default pool;
 
@@ -25,11 +24,9 @@ export function init() {
     });
     connection.connect();
 
-    // Creating the databases if they don't exist
+    // Creating the database if it doesn't exist
     connection.query(
-        `\
-        CREATE DATABASE IF NOT EXISTS ${process.env.DB_SESSION || "session"};
-        CREATE DATABASE IF NOT EXISTS ${process.env.DB || "project"};`,
+        `CREATE DATABASE IF NOT EXISTS ${process.env.DB_NAME || "project"};`,
         (error) => {
             if (error) throw error;
             console.log("Schemas validated");
@@ -39,7 +36,7 @@ export function init() {
     // Creating the tables if they don't exist
     connection.query(
         `\
-        USE ${process.env.DB || "project"};
+        USE ${process.env.DB_NAME || "project"};
         CREATE TABLE IF NOT EXISTS user (
             id INT UNSIGNED NOT NULL AUTO_INCREMENT,
             name VARCHAR(50) NOT NULL,
