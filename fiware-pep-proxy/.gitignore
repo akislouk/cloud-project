@@ -1,0 +1,6 @@
+node_modules
+coverage/
+cert
+.eslintcache
+.nyc_output/
+config.js
