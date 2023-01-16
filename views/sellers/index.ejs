@@ -33,7 +33,7 @@
                 <% let i = 0; for (const product of products) { i++;%>
                 <div class="col-12 col-sm-6 col-md-4 my-4" id="product-<%= i %>">
                     <div class="card">
-                        <a class="mb-4" href="/seller/<%= product.id %>">
+                        <a class="mb-4" href="/seller/<%= product._id %>">
                             <img class="card-img-top img-fluid" <% if (i % 3 === 0) { %>
                                 src="https://images.unsplash.com/photo-1565084888279-aca607ecce0c?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=360&ixid=MnwxfDB8MXxyYW5kb218MHw5OTE0NDY0M3x8fHx8fHwxNjY5NjIzMzg1&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=548"
                                 <% } else if (i % 2 === 0) { %>
@@ -49,7 +49,7 @@
                             </h4>
                             <p class="card-text text-truncate mb-3 mx-3">
                                 <small class="text-muted">
-                                    <%= product.date_of_withdrawal %> <%= product.product_code %>
+                                    <%= product.dateOfWithdrawal %> <%= product.code %>
                                 </small>
                             </p>
 
@@ -59,11 +59,12 @@
 
                             <div class="mx-3 mb-3">
                                 <a class="btn btn-primary d-flex justify-content-between w-100 mb-3"
-                                    href="/seller/<%= product.id %>">
+                                    href="/seller/<%= product._id %>">
                                     Επεξεργασία <i class="bi bi-pencil-fill"></i>
                                 </a>
                                 <form id="delete-form-<%= i %>"
-                                    action="/seller/<%= product.id %>?_method=delete" method="POST">
+                                    action="/seller/<%= product._id %>?_method=delete"
+                                    method="POST">
                                     <button
                                         class="btn btn-danger d-flex justify-content-between w-100">
                                         Διαγραφή <i class="bi bi-trash-fill"></i>
@@ -75,7 +76,7 @@
                                 document.getElementById("delete-form-<%= i %>").addEventListener("submit", async function (event) {
                                     event.preventDefault();
 
-                                    await fetch("http://localhost:3000/seller/<%= product.id %>?ref=index", {
+                                    await fetch("http://localhost:3000/seller/<%= product._id %>?ref=index", {
                                         method: "delete",
                                     })
                                         .then((res) => {

@@ -44,7 +44,7 @@ export const isOwner = async (req, res, next) => {
             // request object so that it can be used by the next middleware.
             req.product = await Product.findById(req.params.pid);
 
-            if (req.product.seller_name === req.user.username) next();
+            if (req.product && req.product.seller === req.user.username) next();
             else {
                 if (!req.query.ref)
                     next(
@@ -72,7 +72,7 @@ export const isOwner = async (req, res, next) => {
         } else if (req.query.cid) {
             const cart = await Cart.findById(req.query.cid);
 
-            if (cart !== "fail" && cart.user_id === req.user.id) next();
+            if (cart && cart.user === req.user.id) next();
             else
                 res.status(403).send(`
                 <div class="toast align-items-center text-bg-danger fade show border-0 position-fixed bottom-0 end-0 z-index-1 me-3 mb-5"
@@ -88,9 +88,7 @@ export const isOwner = async (req, res, next) => {
                     </div>
                 </div>
                 <script src="/scripts/toast.js" type="module"></script>`);
-        } else {
-            next(new ExpressError("Not found", 404));
-        }
+        } else next(new ExpressError("Not found", 404));
     } catch (error) {
         next(error);
     }

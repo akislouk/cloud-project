@@ -43,7 +43,8 @@ export const signup = (req, res) =>
 
 // Validates the request body
 export const validateNewUser = (req, res, next) => {
-    const { error } = newUserSchema.validate(req.body);
+    const { value, error } = newUserSchema.validate(req.body);
+    req.body = value;
     if (error) {
         const msg = error.details.map((el) => el.message).join(",");
         throw new ExpressError(msg, 400);
@@ -137,7 +138,8 @@ export const edit = async (req, res, next) => {
 
 // Validates the request body
 export const validateUser = (req, res, next) => {
-    const { error } = editUserSchema.validate(req.body);
+    const { value, error } = editUserSchema.validate(req.body);
+    req.body = value;
     if (error) {
         const msg = error.details.map((el) => el.message).join(",");
         throw new ExpressError(msg, 400);

@@ -88,7 +88,7 @@
                     </div>
 
                     <div class="form-group form-floating text-start mb-4">
-                        <input class="form-control" id="date" name="date" type="datetime-local"
+                        <input class="form-control" id="date" name="date" type="date"
                             placeholder="Ημερομηνία απόσυρσης">
                         <label class="text-muted opacity-100" for="date">
                             Ημερομηνία απόσυρσης
@@ -132,8 +132,8 @@
                             </h4>
                             <p class="card-text text-truncate mb-3 mx-3">
                                 <small class="text-muted">
-                                    <%= product.first_name %> - <%= product.seller_name %>
-                                    <%= product.date_of_withdrawal %>
+                                    <%= product.first_name %> - <%= product.seller %>
+                                    <%= product.dateOfWithdrawal %>
                                 </small>
                             </p>
 
@@ -159,7 +159,7 @@
                     document.getElementById("btn-<%= i %>").addEventListener("click", async function (event) {
                         event.preventDefault();
 
-                        await fetch("http://localhost:3000/products.php?pid=<%= product.id %>", { method: "post" })
+                        await fetch("http://localhost:3000/products.php?pid=<%= product._id %>", { method: "post" })
                             .then((res) => res.text())
                             .then((res) => {
                                 const el = document.createElement("div");

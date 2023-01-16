@@ -69,17 +69,14 @@ export const editUserSchema = Joi.object({
 
 export const newProductSchema = Joi.object({
     name: Joi.string().pattern(genericRegex100).required().escapeHTML(),
-    product_code: Joi.string().pattern(genericRegex50).required().escapeHTML(),
+    code: Joi.string().pattern(genericRegex50).required().escapeHTML(),
     price: Joi.number().min(0.01).max(999999.99).precision(2).required(),
     category: Joi.string().pattern(genericRegex50).required().escapeHTML(),
 });
 
 export const editProductSchema = Joi.object({
     name: Joi.string().pattern(genericRegex100).allow("", null).escapeHTML(),
-    product_code: Joi.string()
-        .pattern(genericRegex50)
-        .allow("", null)
-        .escapeHTML(),
+    code: Joi.string().pattern(genericRegex50).allow("", null).escapeHTML(),
     price: Joi.number().min(0.01).max(999999.99).precision(2).allow("", null),
     category: Joi.string().pattern(genericRegex50).allow("", null).escapeHTML(),
 });

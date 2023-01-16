@@ -10,33 +10,32 @@
     </div>
 </header>
 
-<% if (products.length > 0) { let i = 0, sum = 0; %>
+<% if (carts.length > 0) { let i = 0, sum = 0; %>
 <div class="container-lg" id="cart">
     <div class="row">
         <main class="col-lg-8">
             <h2>Το καλάθι σας</h2>
-
             <div class="card mb-4">
-                <% for (const product of products) { sum += product.price; i++ %>
+                <% for (const cart of carts) { sum += parseFloat(cart.product.price); i++ %>
                 <div class="card-body" id="product-<%= i %>">
                     <div class="row">
                         <div class="col-9 col-sm-7 col-md-8 order-1 mb-2 mb-sm-0 text-truncate">
-                            <p class="fs-5 mb-tiny"><%= product.name %></p>
+                            <p class="fs-5 mb-tiny"><%= cart.product.name %></p>
                             <small class="text-muted">
                                 Προστέθηκε στο καλάθι:
-                                <%= product.date_of_insertion.toLocaleString() %>
+                                <%= cart.dateOfInsertion.toLocaleString() %>
                             </small>
                         </div>
 
                         <div class="col-auto col-sm-4 col-md-3 order-3 order-sm-2">
                             <p class="fs-5 text-end mb-0 fw-bold">
-                                <%= new Intl.NumberFormat("el-GR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(product.price) %>
+                                <%= new Intl.NumberFormat("el-GR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(cart.product.price) %>
                                 €
                             </p>
                         </div>
 
                         <div class="col-3 col-sm-1 order-2 order-sm-3 text-end">
-                            <form action="/cart.php?_method=delete&cid=<%= product.id %>"
+                            <form action="/cart.php?_method=delete&cid=<%= cart._id %>"
                                 method="post">
                                 <a class="text-reset fs-5" id="delete-form-<%= i %>" role="button"
                                     title="Αφαίρεση προϊόντος από το καλάθι" href="#">
@@ -51,7 +50,7 @@
                     document.getElementById("delete-form-<%= i %>").addEventListener("click", async function (event) {
                         event.preventDefault();
 
-                        await fetch("http://localhost:3000/cart.php?cid=<%= product.id %>", {
+                        await fetch("http://localhost:3000/cart.php?cid=<%= cart._id %>", {
                             method: "delete",
                         })
                             .then((res) => {
@@ -67,7 +66,7 @@
                                             useGrouping: false,
                                         }).format(parseFloat(span.innerText.replaceAll(".", "").replaceAll(",", ".")));
 
-                                        newSum -= <%= product.price %>;
+                                        newSum -= <%= parseFloat(cart.product.price) %>;
 
                                         if (newSum === 0) {
                                             const div = document.createElement("div");
@@ -101,7 +100,7 @@
                     })
                 </script>
 
-                <% if (i !== products.length) { %>
+                <% if (i !== carts.length) { %>
                 <hr class="my-0" id="hr-<%= i %>">
                 <% }} sum = new Intl.NumberFormat("el-GR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(sum);%>
             </div>

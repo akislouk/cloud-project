@@ -12,11 +12,11 @@
                 </p>
             </header>
 
-            <form class="d-none" id="delete-form" action="/seller/<%= product.id %>?_method=delete"
+            <form class="d-none" id="delete-form" action="/seller/<%= product._id %>?_method=delete"
                 method="post"></form>
 
-            <form class="validate-form" action="/seller/<%= product.id %>?_method=put" method="post"
-                novalidate>
+            <form class="validate-form" action="/seller/<%= product._id %>?_method=put"
+                method="post" novalidate>
                 <div class="form-group mb-4">
                     <label class="form-label" for="name">
                         Όνομα
@@ -32,8 +32,8 @@
                     <label class="form-label" for="product-code">
                         Κωδικός προϊόντος
                     </label>
-                    <input class="form-control" id="product-code" name="product_code" type="text"
-                        placeholder="<%= product.product_code %>" pattern="[\S ]{0,50}">
+                    <input class="form-control" id="product-code" name="code" type="text"
+                        placeholder="<%= product.code %>" pattern="[\S ]{0,50}">
                     <div class="invalid-feedback">
                         Παρακαλώ εισάγετε έναν έγκυρο κωδικό προϊόντος μέχρι 50 χαρακτήρες.
                     </div>
