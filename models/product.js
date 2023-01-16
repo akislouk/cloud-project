@@ -21,7 +21,7 @@ const ProductSchema = new Schema(
                     .sort({ price: 1 })
                     .limit(1)
                     .lean();
-                return product[0].price;
+                return product.length > 0 ? product[0].price : 0;
             },
             // Finds and returns the maximum product price
             async findMaxPrice() {
@@ -29,7 +29,7 @@ const ProductSchema = new Schema(
                     .sort({ price: -1 })
                     .limit(1)
                     .lean();
-                return product[0].price;
+                return product.length > 0 ? product[0].price : 999999.99;
             },
         },
     }
