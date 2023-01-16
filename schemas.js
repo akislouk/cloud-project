@@ -64,7 +64,6 @@ export const editUserSchema = Joi.object({
     username: Joi.string().pattern(genericRegex50).allow("", null).escapeHTML(),
     email: Joi.string().email().max(255).allow("", null),
     role: Joi.string().valid("user", "product seller", "admin").allow("", null),
-    confirmed: Joi.boolean().truthy("1").falsy("0").allow("", null),
 });
 
 export const newProductSchema = Joi.object({

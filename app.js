@@ -17,15 +17,33 @@ import { join, dirname } from "path";
 
 // First-party imports
 import ExpressError from "./utils/ExpressError.js";
-import { init } from "./models/db.js";
+import pool from "./models/db.js";
 import User from "./models/user.js";
 import usersRoutes from "./routes/users.js";
 import productsRoutes from "./routes/products.js";
 import sellersRoutes from "./routes/sellers.js";
 
-// Initializing the MySQL database. In a real app this would be replaced by
-// a simple query to test the connection to the database
-init();
+// Making sure the user table and the admin exist
+pool.query(
+    `\
+    CREATE TABLE IF NOT EXISTS user (
+        id VARCHAR(50) NOT NULL,
+        name VARCHAR(50) NOT NULL,
+        surname VARCHAR(50) NOT NULL,
+        username VARCHAR(50) NOT NULL,
+        email VARCHAR(255) NOT NULL,
+        role ENUM('admin', 'product seller', 'user') DEFAULT 'user',
+        PRIMARY KEY (id),
+        UNIQUE KEY (username),
+        UNIQUE KEY (email)
+    ) DEFAULT CHARSET=utf8;
+    INSERT INTO user
+    SELECT 'admin', 'Σπύρος', 'Λουκάτος', 'admin', 'admin@tuc.gr', 'admin';`,
+    (error) => {
+        if (error) console.log(error.sqlMessage);
+        console.log("Tables validated");
+    }
+);
 
 // Connecting to MongoDB
 const dbUrl = process.env.DB_URL || "mongodb://0.0.0.0:27017/app";

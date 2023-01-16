@@ -1,7 +1,6 @@
 import User from "../models/user.js";
 import { newUserSchema, editUserSchema } from "../schemas.js";
 import ExpressError from "../utils/ExpressError.js";
-const { scrypt, webcrypto } = await import("node:crypto");
 
 export const home = (req, res) => res.redirect("/index.php");
 export const index = (req, res) => {
@@ -9,13 +8,38 @@ export const index = (req, res) => {
     else res.render("users", { title: "Σύνδεση" });
 };
 
-// Logs the user in if they gave the right credentials and if they are confirmed
+// Logs the user in if they gave the right credentials
 export const login = async (req, res, next) => {
     try {
+        // Deconstructing the request body
         const { username, password } = req.body;
-        const user = await User.findAndValidate(username, password);
 
-        if (user && user.confirmed === 1) {
+        // Encoding the client id and secret in base-64
+        const auth = Buffer.from(
+            `${process.env.KEYROCK_ID}:${process.env.KEYROCK_SECRET}`
+        ).toString("base64");
+
+        // Setting up the request headers
+        const headers = new Headers();
+        headers.append("Authorization", "Basic " + auth);
+        headers.append("Content-Type", "application/x-www-form-urlencoded");
+
+        // Setting up the request body
+        // const body = { name: username, password };
+
+        const response = await fetch(`http://localhost:3005/oauth2/token`, {
+            method: "post",
+            headers,
+            body: `grant_type=password&username=${username}&password=${password}`,
+        }).then((res) => res.json());
+
+        if (response.error) {
+            req.flash("error", "Λάθος στοιχεία. Παρακαλώ δοκιμάστε ξανά.");
+            return res.redirect("/index.php");
+        }
+
+        const user = await User.findByEmail(username);
+        if (user) {
             req.session.user = user.id;
             req.flash(
                 "success",
@@ -23,13 +47,7 @@ export const login = async (req, res, next) => {
             );
             res.redirect(req.session.returnTo || "/welcome.php");
         } else {
-            if (!user)
-                req.flash("error", "Λάθος στοιχεία. Παρακαλώ δοκιμάστε ξανά.");
-            else
-                req.flash(
-                    "error",
-                    "Δεν έχει γίνει ακόμα επιβεβαίωση του λογαριασμού σας. Παρακαλώ επικοινωνήστε με το διαχειριστή."
-                );
+            req.flash("error", "Λάθος στοιχεία. Παρακαλώ δοκιμάστε ξανά.");
             res.redirect("/index.php");
         }
     } catch (error) {
@@ -55,30 +73,44 @@ export const validateNewUser = (req, res, next) => {
 export const create = async (req, res, next) => {
     try {
         // Deconstructing the request body
-        const { name, surname, username, email, role } = req.body;
+        const { name, surname, username, password, email, role } = req.body;
 
-        // Creating a salt by generating a truly random array of numbers
-        // and turning it into a base-64, url-safe encoded string
-        const salt = Buffer.from(
-            webcrypto.getRandomValues(new Int8Array(16))
-        ).toString("base64url");
+        // Setting up the request headers
+        const headers = new Headers();
+        headers.append("Content-Type", "application/json");
 
-        // Generating a hash using the user's password and the salt.
-        // The hash is a 128-long hexadecimal
-        const hash = await new Promise((resolve, reject) =>
-            scrypt(req.body.password, salt, 64, (error, hash) => {
-                if (error) return reject(error);
-                resolve(hash.toString("hex").toUpperCase());
-            })
-        );
+        // Setting up the request body
+        const body = {
+            name: process.env.KEYROCK_ADMIN,
+            password: process.env.KEYROCK_PASS,
+        };
+
+        // Getting the admin token
+        const token = await fetch("http://localhost:3005/v1/auth/tokens", {
+            method: "post",
+            headers,
+            body: JSON.stringify(body),
+        }).then((res) => res.headers.get("X-Subject-Token"));
+
+        // Adding the admin token to the headers
+        headers.append("X-Auth-token", token);
+
+        // Creating the new user in keyrock
+        const response = await fetch("http://localhost:3005/v1/users", {
+            method: "post",
+            headers,
+            body: JSON.stringify({ user: { username, email, password } }),
+        }).then((res) => res.json());
+
+        if (response.error)
+            throw new ExpressError(response.error.message, response.error.code);
 
         // Using the User class constructor to create the new user
         const user = new User({
+            id: response.user.id,
             name,
             surname,
             username,
-            salt,
-            hash,
             email,
             role,
         });
@@ -96,6 +128,7 @@ export const create = async (req, res, next) => {
     }
 };
 
+// Displays the welcome page
 export const welcome = (req, res) =>
     res.render("users/welcome", { title: "Αρχική" });
 
@@ -112,6 +145,7 @@ export const logout = (req, res, next) => {
     });
 };
 
+// Displays the administration page
 export const admin = (req, res) => res.redirect("/administration.php");
 
 // Finds all the users, saves them to the response object and displays the admin page
@@ -156,7 +190,7 @@ export const update = async (req, res, next) => {
         });
 
         // Deconstructing the request body
-        const { name, surname, username, email, role, confirmed } = req.body;
+        const { name, surname, username, email, role } = req.body;
 
         // Updating the user details if any new values are given
         name && (user.name = name);
@@ -164,7 +198,6 @@ export const update = async (req, res, next) => {
         username && (user.username = username);
         email && (user.email = email);
         role && (user.role = role);
-        confirmed && (user.confirmed = confirmed);
 
         // Updating the user in the database
         await user.update();
@@ -188,7 +221,7 @@ export const destroy = async (req, res, next) => {
                 )
             );
         else {
-            await User.remove(req.params.uid);
+            await User.findByIdAndDelete(req.params.uid);
 
             // Sending success message and redirecting if the request came from the edit page
             if (!req.query.ref) {

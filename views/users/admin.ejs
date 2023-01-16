@@ -14,26 +14,22 @@
     <table class="table table-hover">
         <thead>
             <tr>
-                <th class="text-end">ID</th>
                 <th>Όνομα</th>
                 <th>Επίθετο</th>
                 <th>Username</th>
                 <th>Email</th>
                 <th>Ρόλος</th>
-                <th class="text-end">Επιβεβαιωμένος</th>
                 <th class="text-center">Ενέργειες</th>
             </tr>
         </thead>
         <tbody>
             <% let i = 0; for (const usr of users) { i++ %>
             <tr id="row-<%= i %>">
-                <td class="text-end"><%= usr.id %></td>
                 <td><%= usr.name %></td>
                 <td><%= usr.surname %></td>
                 <td><%= usr.username %></td>
                 <td><%= usr.email %></td>
                 <td class="text-truncate"><%= usr.role.replace("product ", "") %></td>
-                <td class="text-end"><%= usr.confirmed %></td>
                 <td class="d-flex justify-content-evenly">
                     <a class="text-reset" title="Επεξεργασία χρήστη"
                         href="/administration/<%= usr.id %>">

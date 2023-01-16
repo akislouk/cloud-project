@@ -3,9 +3,8 @@ version: "3.4"
 services:
     mysql:
         restart: always
-        image: mysql:8
+        image: mysql:5.7
         container_name: mysql
-        command: --default-authentication-plugin=mysql_native_password
         environment:
             MYSQL_ROOT_PASSWORD: root
             MYSQL_DATABASE: project
@@ -30,7 +29,7 @@ services:
             - mongodb
         restart: always
         image: app
-        container_name: project-app
+        container_name: cloud-app
         build:
             context: .
             dockerfile: ./Dockerfile
@@ -45,6 +44,24 @@ services:
             - 80:80
         volumes:
             - "./:/usr/src/app"
+    keyrock:
+        depends_on:
+            - mysql
+        image: fiware/idm:7.6.0
+        container_name: fiware-keyrock
+        ports:
+            - 3005:3005
+            - 443:443
+        environment:
+            - DEBUG=idm:*
+            - IDM_DB_HOST=mysql
+            - IDM_HOST=http://localhost:3005
+            - IDM_PORT=3005
+            - IDM_DB_PASS=root
+            - IDM_DB_USER=root
+            - IDM_ADMIN_USER=admin
+            - IDM_ADMIN_EMAIL=admin@tuc.gr
+            - IDM_ADMIN_PASS=admin
 
 volumes:
     mysql: ~

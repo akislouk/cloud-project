@@ -1,8 +1,10 @@
 FROM node:lts-alpine
 ENV NODE_ENV=production
 ENV PORT=80
-ENV ADMIN_SALT=QqjnpsFF-B0i-xzVq_sk0A
-ENV ADMIN_HASH=c9f67cd0e7e9d34a26b8648419a6808cf0da05ab143ea14fc12597cc9512752a1e4368b1ba65784ab1d0a48497cfb2da62ce7466a816cd7b6e497694e5ec8199
+ENV KEYROCK_ID=db3fc8d1-7c0b-43e4-be9b-237ac2fb778c
+ENV KEYROCK_SECRET=71f7af22-1f9d-44bd-b5ff-1b6493ec3d8b
+ENV KEYROCK_ADMIN=admin@tuc.gr
+ENV KEYROCK_PASS=admin
 WORKDIR /usr/src/app
 COPY ["package*.json", "./"]
 RUN npm install --production --silent && mv node_modules ../

@@ -1,5 +1,5 @@
 {
-    "cSpell.words": ["DATETIME", "Spyros", "UNHEX"],
+    "cSpell.words": ["DATETIME", "fiware", "keyrock", "Spyros", "UNHEX"],
     "emmet.includeLanguages": {
         "ejs": "html"
     },
