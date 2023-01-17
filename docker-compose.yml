@@ -1,5 +1,4 @@
 version: "3.4"
-
 services:
     mysql:
         restart: always
@@ -10,6 +9,9 @@ services:
             MYSQL_DATABASE: project
             MYSQL_USER: project
             MYSQL_PASSWORD: project
+        networks:
+            default:
+                ipv4_address: 172.18.1.6
         ports:
             - 3306:3306
         volumes:
@@ -23,10 +25,32 @@ services:
             - 27018:27017
         volumes:
             - mongodb:/data/db
+    keyrock:
+        depends_on:
+            - mysql
+        image: fiware/idm:7.6.0
+        container_name: keyrock
+        networks:
+            default:
+                ipv4_address: 172.18.1.5
+        ports:
+            - 3005:3005
+            - 443:443
+        environment:
+            DEBUG: idm:*
+            IDM_DB_HOST: mysql
+            IDM_HOST: http://localhost:3005
+            IDM_PORT: 3005
+            IDM_DB_PASS: root
+            IDM_DB_USER: root
+            IDM_ADMIN_USER: admin
+            IDM_ADMIN_EMAIL: admin@tuc.gr
+            IDM_ADMIN_PASS: admin
     app:
         depends_on:
             - mysql
             - mongodb
+            - keyrock
         restart: always
         image: app
         container_name: cloud-app
@@ -40,29 +64,20 @@ services:
             DB_PASS: project
             DB_NAME: project
             DB_URL: mongodb://mongodb:27017/app
+            KEYROCK_HOST: http://172.18.1.5:3005
+            KEYROCK_ID: bffdb953-f3c2-4a6d-b6df-a22ed5f88297
+            KEYROCK_SECRET: 2f99d43e-0c63-431b-a8b2-37e9eab80c22
+            KEYROCK_ADMIN: admin@tuc.gr
+            KEYROCK_PASS: admin
         ports:
             - 80:80
         volumes:
             - "./:/usr/src/app"
-    keyrock:
-        depends_on:
-            - mysql
-        image: fiware/idm:7.6.0
-        container_name: fiware-keyrock
-        ports:
-            - 3005:3005
-            - 443:443
-        environment:
-            - DEBUG=idm:*
-            - IDM_DB_HOST=mysql
-            - IDM_HOST=http://localhost:3005
-            - IDM_PORT=3005
-            - IDM_DB_PASS=root
-            - IDM_DB_USER=root
-            - IDM_ADMIN_USER=admin
-            - IDM_ADMIN_EMAIL=admin@tuc.gr
-            - IDM_ADMIN_PASS=admin
-
+networks:
+    default:
+        ipam:
+            config:
+                - subnet: 172.18.1.0/24
 volumes:
     mysql: ~
     mongodb: ~

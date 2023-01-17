@@ -24,14 +24,14 @@ export const login = async (req, res, next) => {
         headers.append("Authorization", "Basic " + auth);
         headers.append("Content-Type", "application/x-www-form-urlencoded");
 
-        // Setting up the request body
-        // const body = { name: username, password };
-
-        const response = await fetch(`http://localhost:3005/oauth2/token`, {
-            method: "post",
-            headers,
-            body: `grant_type=password&username=${username}&password=${password}`,
-        }).then((res) => res.json());
+        const response = await fetch(
+            `${process.env.KEYROCK_HOST}/oauth2/token`,
+            {
+                method: "post",
+                headers,
+                body: `grant_type=password&username=${username}&password=${password}`,
+            }
+        ).then((res) => res.json());
 
         if (response.error) {
             req.flash("error", "Λάθος στοιχεία. Παρακαλώ δοκιμάστε ξανά.");
@@ -86,17 +86,20 @@ export const create = async (req, res, next) => {
         };
 
         // Getting the admin token
-        const token = await fetch("http://localhost:3005/v1/auth/tokens", {
-            method: "post",
-            headers,
-            body: JSON.stringify(body),
-        }).then((res) => res.headers.get("X-Subject-Token"));
+        const token = await fetch(
+            `${process.env.KEYROCK_HOST}/v1/auth/tokens`,
+            {
+                method: "post",
+                headers,
+                body: JSON.stringify(body),
+            }
+        ).then((res) => res.headers.get("X-Subject-Token"));
 
         // Adding the admin token to the headers
         headers.append("X-Auth-token", token);
 
         // Creating the new user in keyrock
-        const response = await fetch("http://localhost:3005/v1/users", {
+        const response = await fetch(`${process.env.KEYROCK_HOST}/v1/users`, {
             method: "post",
             headers,
             body: JSON.stringify({ user: { username, email, password } }),

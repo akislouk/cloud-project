@@ -132,7 +132,7 @@ app.use((err, req, res, next) => {
     res.status(status).render("error", { err, title: "Σφάλμα" });
 });
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 80;
 app.listen(port, () => console.log("Serving on port", port));
 
 export default app;

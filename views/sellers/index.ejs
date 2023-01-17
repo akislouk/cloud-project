@@ -76,7 +76,7 @@
                                 document.getElementById("delete-form-<%= i %>").addEventListener("submit", async function (event) {
                                     event.preventDefault();
 
-                                    await fetch("http://localhost:3000/seller/<%= product._id %>?ref=index", {
+                                    await fetch("http://localhost/seller/<%= product._id %>?ref=index", {
                                         method: "delete",
                                     })
                                         .then((res) => {
