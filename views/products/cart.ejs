@@ -50,7 +50,7 @@
                     document.getElementById("delete-form-<%= i %>").addEventListener("click", async function (event) {
                         event.preventDefault();
 
-                        await fetch("http://localhost/cart.php?cid=<%= cart._id %>", {
+                        await fetch("/cart.php?cid=<%= cart._id %>", {
                             method: "delete",
                         })
                             .then((res) => {

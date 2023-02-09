@@ -159,7 +159,7 @@
                     document.getElementById("btn-<%= i %>").addEventListener("click", async function (event) {
                         event.preventDefault();
 
-                        await fetch("http://localhost/products.php?pid=<%= product._id %>", { method: "post" })
+                        await fetch("/products.php?pid=<%= product._id %>", { method: "post" })
                             .then((res) => res.text())
                             .then((res) => {
                                 const el = document.createElement("div");
