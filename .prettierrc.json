@@ -1,0 +1,24 @@
+{
+  "tabWidth": 4,
+  "printWidth": 89,
+  "overrides": [
+    {
+      "files": "*.md",
+      "options": {
+        "tabWidth": 1
+      }
+    },
+    {
+      "files": "*.json",
+      "options": {
+        "tabWidth": 2
+      }
+    },
+    {
+      "files": ["*.ejs", "*.html", "*.liquid"],
+      "options": {
+        "printWidth": 120
+      }
+    }
+  ]
+}
