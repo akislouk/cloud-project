@@ -1,4 +1,4 @@
-import { createConnection, createPool } from "mysql2";
+import { createPool } from "mysql2";
 
 const pool = createPool({
     host: process.env.DB_HOST || "localhost",

@@ -1,5 +1,4 @@
 import pool from "./db.js";
-const { scrypt } = await import("node:crypto");
 
 // The user class
 class User {
