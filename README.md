@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This is a two-part project for the Services in Cloud and Fog Computing course at the Technical University of Crete.
+This project is a two-part exercise for the Services in Cloud and Fog Computing course at the Technical University of Crete.
 
 ### Part 1 Summary
 
@@ -14,7 +14,7 @@ For the first part of the project, we were asked to create a web application tha
 
 A detailed description of the first part can be found [here](part-1.pdf).
 
-We were allowed to use any programming language and framework we wanted, so I chose to use Node.js with Express for the backend and Bootstrap for the frontend.
+We were allowed to use any programming language and framework we wanted, so I chose to use **Node.js** with **Express** for the backend and **Bootstrap** for the frontend.
 
 ### Part 2 Summary
 
