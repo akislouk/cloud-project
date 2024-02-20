@@ -1,18 +1,15 @@
 // Reveal navbar when scrolling
 const navbarReveal = document.querySelector(".navbar-reveal");
 const windowEvents = ["load", "scroll"];
-let windowScroll = window.pageYOffset;
+let windowScroll = window.scrollY;
 
 if (navbarReveal)
     windowEvents.forEach((e) => {
         window.addEventListener(e, () => {
-            const currentScroll = window.pageYOffset;
+            const currentScroll = window.scrollY;
             const navbarOffset =
-                windowScroll < currentScroll && currentScroll > 0
-                    ? "-100%"
-                    : "0";
-            const navbarCollapse =
-                navbarReveal.querySelector(".navbar-collapse");
+                windowScroll < currentScroll && currentScroll > 0 ? "-100%" : "0";
+            const navbarCollapse = navbarReveal.querySelector(".navbar-collapse");
 
             if (!navbarCollapse.classList.contains("show"))
                 navbarReveal.style.transform = `translateY(${navbarOffset})`;
@@ -84,18 +81,8 @@ function positionDrop(menu) {
     Popper.createPopper(drop, positioner, {
         placement: menuPlacement,
         modifiers: [
-            {
-                name: "offset",
-                options: {
-                    offset: menuOffset,
-                },
-            },
-            {
-                name: "preventOverflow",
-                options: {
-                    padding: overflowPadding,
-                },
-            },
+            { name: "offset", options: { offset: menuOffset } },
+            { name: "preventOverflow", options: { padding: overflowPadding } },
         ],
     });
 }
