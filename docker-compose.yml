@@ -15,7 +15,7 @@ services:
             - mysql:/var/lib/mysql
     mongodb:
         restart: always
-        image: mongo:6
+        image: mongo
         container_name: mongodb
         ports:
             - 27017:27017
@@ -60,8 +60,8 @@ services:
             DB_NAME: project
             DB_URL: mongodb://mongodb:27017/app
             KEYROCK_HOST: http://keyrock:3005
-            KEYROCK_ID: bffdb953-f3c2-4a6d-b6df-a22ed5f88297
-            KEYROCK_SECRET: 2f99d43e-0c63-431b-a8b2-37e9eab80c22
+            KEYROCK_ID: b58858ff-3107-41c2-a93d-d0e3b0794854
+            KEYROCK_SECRET: 4b57aebb-b4b5-47e3-9f77-0f174f1033cb
             KEYROCK_ADMIN: admin@tuc.gr
             KEYROCK_PASS: admin
         ports:
