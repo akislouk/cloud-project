@@ -6,9 +6,7 @@ export const seller = (req, res) => res.redirect("/seller.php");
 export const index = async (req, res, error) => {
     try {
         // Finding the seller's products
-        res.locals.products = await Product.findByUsername(
-            req.user.username
-        ).lean();
+        res.locals.products = await Product.findByUsername(req.user.username).lean();
 
         // Turning the prices to the Greek price format
         res.locals.products.forEach((product) => {
@@ -23,8 +21,7 @@ export const index = async (req, res, error) => {
     }
 };
 
-export const newForm = (req, res) =>
-    res.render("sellers/new", { title: "Νέο Προϊόν" });
+export const newForm = (req, res) => res.render("sellers/new", { title: "Νέο Προϊόν" });
 
 // Validates the request body
 export const validateNewProduct = (req, res, next) => {
@@ -56,10 +53,7 @@ export const create = async (req, res, next) => {
         await product.save();
 
         // Sending success message and redirecting
-        req.flash(
-            "success",
-            `Το προϊον "${product.name}" καταχωρήθηκε με επιτυχία.`
-        );
+        req.flash("success", `Το προϊον "${product.name}" καταχωρήθηκε με επιτυχία.`);
         res.redirect("/seller.php");
     } catch (error) {
         next(error);
@@ -113,7 +107,7 @@ export const update = async (req, res, next) => {
 // Deletes a product from the database
 export const destroy = async (req, res, next) => {
     try {
-        const product = await req.product.remove();
+        const result = await req.product.deleteOne();
 
         // Sending success message and redirecting if the request came from the edit page
         if (!req.query.ref) {
@@ -121,10 +115,10 @@ export const destroy = async (req, res, next) => {
                 "success",
                 `Το προϊόν "${req.product.name}" διαγράφηκε με επιτυχία.`
             );
-            res.redirect("/seller.php");
-        } else {
-            if (product.$isDeleted())
-                res.status(200).send(`
+            return res.redirect("/seller.php");
+        }
+        if (result.deletedCount)
+            res.status(200).send(`\
                 <div class="toast align-items-center text-bg-success fade show border-0 position-fixed bottom-0 end-0 z-index-1 me-3 mb-5"
                     role="status" aria-live="polite" aria-atomic="true">
                     <div class="d-flex justify-content-between fs-6">
@@ -138,22 +132,21 @@ export const destroy = async (req, res, next) => {
                     </div>
                 </div>
                 <script src="/scripts/toast.js" type="module"></script>`);
-            else
-                res.status(403).send(`
-                    <div class="toast align-items-center text-bg-danger fade show border-0 position-fixed bottom-0 end-0 z-index-1 me-3 mb-5"
-                        role="alert" aria-live="assertive" aria-atomic="true">
-                        <div class="d-flex justify-content-between fs-6">
-                            <div class="toast-body">
-                                Δεν έχετε τα απαραίτητα δικαιώματα για να πραγματοποιήσετε αυτήν την ενέργεια.
-                            </div>
-                            <div class="toast-body d-flex">
-                                <button class="btn-close btn-close-white mb-auto" data-bs-dismiss="toast" type="button"
-                                    aria-label="Close"></button>
-                            </div>
+        else
+            res.status(403).send(`\
+                <div class="toast align-items-center text-bg-danger fade show border-0 position-fixed bottom-0 end-0 z-index-1 me-3 mb-5"
+                    role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex justify-content-between fs-6">
+                        <div class="toast-body">
+                            Δεν έχετε τα απαραίτητα δικαιώματα για να πραγματοποιήσετε αυτήν την ενέργεια.
+                        </div>
+                        <div class="toast-body d-flex">
+                            <button class="btn-close btn-close-white mb-auto" data-bs-dismiss="toast" type="button"
+                                aria-label="Close"></button>
                         </div>
                     </div>
-                    <script src="/scripts/toast.js" type="module"></script>`);
-        }
+                </div>
+                <script src="/scripts/toast.js" type="module"></script>`);
     } catch (error) {
         next(error);
     }
