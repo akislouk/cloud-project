@@ -1,3 +1,5 @@
+import Cart from "../models/cart.js";
+import Product from "../models/product.js";
 import User from "../models/user.js";
 import { newUserSchema, editUserSchema } from "../schemas.js";
 import ExpressError from "../utils/ExpressError.js";
@@ -11,7 +13,7 @@ export const index = (req, res) => {
 // Logs the user in if they gave the right credentials
 export const login = async (req, res, next) => {
     try {
-        // Deconstructing the request body
+        // Destructuring the request body
         const { username, password } = req.body;
 
         // Encoding the client id and secret in base-64
@@ -24,14 +26,11 @@ export const login = async (req, res, next) => {
         headers.append("Authorization", "Basic " + auth);
         headers.append("Content-Type", "application/x-www-form-urlencoded");
 
-        const response = await fetch(
-            `${process.env.KEYROCK_HOST}/oauth2/token`,
-            {
-                method: "post",
-                headers,
-                body: `grant_type=password&username=${username}&password=${password}`,
-            }
-        ).then((res) => res.json());
+        const response = await fetch(`${process.env.KEYROCK_HOST}/oauth2/token`, {
+            method: "post",
+            headers,
+            body: `grant_type=password&username=${username}&password=${password}`,
+        }).then((res) => res.json());
 
         if (response.error) {
             req.flash("error", "Λάθος στοιχεία. Παρακαλώ δοκιμάστε ξανά.");
@@ -41,10 +40,7 @@ export const login = async (req, res, next) => {
         const user = await User.findByEmail(username);
         if (user) {
             req.session.user = user.id;
-            req.flash(
-                "success",
-                `Καλώς ορίσατε πίσω στο Cloud Project, ${user.name}!`
-            );
+            req.flash("success", `Καλώς ορίσατε πίσω στο Cloud Project, ${user.name}!`);
             res.redirect(req.session.returnTo || "/welcome.php");
         } else {
             req.flash("error", "Λάθος στοιχεία. Παρακαλώ δοκιμάστε ξανά.");
@@ -56,8 +52,7 @@ export const login = async (req, res, next) => {
 };
 
 export const register = (req, res) => res.redirect("/signup.php");
-export const signup = (req, res) =>
-    res.render("users/signup", { title: "Εγγραφή" });
+export const signup = (req, res) => res.render("users/signup", { title: "Εγγραφή" });
 
 // Validates the request body
 export const validateNewUser = (req, res, next) => {
@@ -72,7 +67,7 @@ export const validateNewUser = (req, res, next) => {
 // Creates the new user and saves them to the database
 export const create = async (req, res, next) => {
     try {
-        // Deconstructing the request body
+        // Destructuring the request body
         const { name, surname, username, password, email, role } = req.body;
 
         // Setting up the request headers
@@ -86,14 +81,11 @@ export const create = async (req, res, next) => {
         };
 
         // Getting the admin token
-        const token = await fetch(
-            `${process.env.KEYROCK_HOST}/v1/auth/tokens`,
-            {
-                method: "post",
-                headers,
-                body: JSON.stringify(body),
-            }
-        ).then((res) => res.headers.get("X-Subject-Token"));
+        const token = await fetch(`${process.env.KEYROCK_HOST}/v1/auth/tokens`, {
+            method: "post",
+            headers,
+            body: JSON.stringify(body),
+        }).then((res) => res.headers.get("X-Subject-Token"));
 
         // Adding the admin token to the headers
         headers.append("X-Auth-token", token);
@@ -132,8 +124,7 @@ export const create = async (req, res, next) => {
 };
 
 // Displays the welcome page
-export const welcome = (req, res) =>
-    res.render("users/welcome", { title: "Αρχική" });
+export const welcome = (req, res) => res.render("users/welcome", { title: "Αρχική" });
 
 // Logs the user out by removing their ID from the session cookie
 export const logout = (req, res, next) => {
@@ -165,8 +156,7 @@ export const show = async (req, res, next) => {
 export const edit = async (req, res, next) => {
     try {
         res.locals.usr = await User.findById(req.params.uid);
-        if (res.locals.usr)
-            res.render("users/edit", { title: "Επεξεργασία Χρήστη" });
+        if (res.locals.usr) res.render("users/edit", { title: "Επεξεργασία Χρήστη" });
         else throw new ExpressError("Not found.", 404);
     } catch (error) {
         next(error);
@@ -192,7 +182,7 @@ export const update = async (req, res, next) => {
             else next(new ExpressError("Not found.", 404));
         });
 
-        // Deconstructing the request body
+        // Destructuring the request body
         const { name, surname, username, email, role } = req.body;
 
         // Updating the user details if any new values are given
@@ -217,21 +207,19 @@ export const update = async (req, res, next) => {
 export const destroy = async (req, res, next) => {
     try {
         if (req.user.id === parseInt(req.params.uid))
-            next(
-                new ExpressError(
-                    "Δεν μπορείς να διαγράψεις τον εαυτό σου!",
-                    403
-                )
-            );
+            next(new ExpressError("Δεν μπορείς να διαγράψεις τον εαυτό σου!", 403));
         else {
+            // Deleting the user and their related data
             await User.findByIdAndDelete(req.params.uid);
+            await Cart.deleteMany({ user: req.params.uid });
+            await Product.deleteMany({ seller: req.params.uid });
 
             // Sending success message and redirecting if the request came from the edit page
             if (!req.query.ref) {
                 req.flash("success", "Ο χρήστης διαγράφηκε με επιτυχία.");
                 res.redirect("/administration.php");
             } else {
-                res.status(200).send(`
+                res.status(200).send(`\
                     <div class="toast align-items-center text-bg-success fade show border-0 position-fixed bottom-0 end-0 z-index-1 me-3 mb-5"
                         role="status" aria-live="polite" aria-atomic="true">
                         <div class="d-flex justify-content-between fs-6">
@@ -244,8 +232,7 @@ export const destroy = async (req, res, next) => {
                             </div>
                         </div>
                     </div>
-                    <script src="/scripts/toast.js" type="module"></script>
-                `);
+                    <script src="/scripts/toast.js" type="module"></script>`);
             }
         }
     } catch (error) {
