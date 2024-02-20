@@ -73,24 +73,9 @@ export const create = async (req, res, next) => {
         // Setting up the request headers
         const headers = new Headers();
         headers.append("Content-Type", "application/json");
+        headers.append("X-Auth-token", await getAdminToken());
 
-        // Setting up the request body
-        const body = {
-            name: process.env.KEYROCK_ADMIN,
-            password: process.env.KEYROCK_PASS,
-        };
-
-        // Getting the admin token
-        const token = await fetch(`${process.env.KEYROCK_HOST}/v1/auth/tokens`, {
-            method: "post",
-            headers,
-            body: JSON.stringify(body),
-        }).then((res) => res.headers.get("X-Subject-Token"));
-
-        // Adding the admin token to the headers
-        headers.append("X-Auth-token", token);
-
-        // Creating the new user in keyrock
+        // Creating the new user in Keyrock
         const response = await fetch(`${process.env.KEYROCK_HOST}/v1/users`, {
             method: "post",
             headers,
@@ -179,7 +164,7 @@ export const update = async (req, res, next) => {
         // Finding the user to be updated
         const user = await User.findById(req.params.uid).then((result) => {
             if (result) return new User(result);
-            else next(new ExpressError("Not found.", 404));
+            else throw new ExpressError("Not found.", 404);
         });
 
         // Destructuring the request body
@@ -207,35 +192,66 @@ export const update = async (req, res, next) => {
 export const destroy = async (req, res, next) => {
     try {
         if (req.user.id === parseInt(req.params.uid))
-            next(new ExpressError("Δεν μπορείς να διαγράψεις τον εαυτό σου!", 403));
-        else {
-            // Deleting the user and their related data
-            await User.findByIdAndDelete(req.params.uid);
-            await Cart.deleteMany({ user: req.params.uid });
-            await Product.deleteMany({ seller: req.params.uid });
+            throw new ExpressError("Δεν μπορείς να διαγράψεις τον εαυτό σου!", 403);
 
-            // Sending success message and redirecting if the request came from the edit page
-            if (!req.query.ref) {
-                req.flash("success", "Ο χρήστης διαγράφηκε με επιτυχία.");
-                res.redirect("/administration.php");
-            } else {
-                res.status(200).send(`\
-                    <div class="toast align-items-center text-bg-success fade show border-0 position-fixed bottom-0 end-0 z-index-1 me-3 mb-5"
-                        role="status" aria-live="polite" aria-atomic="true">
-                        <div class="d-flex justify-content-between fs-6">
-                            <div class="toast-body">
-                                Ο χρήστης διαγράφηκε διαγράφηκε με επιτυχία.
-                            </div>
-                            <div class="toast-body d-flex">
-                                <button class="btn-close btn-close-white mb-auto" data-bs-dismiss="toast" type="button"
-                                    aria-label="Close"></button>
-                            </div>
+        // Setting up the request headers
+        const headers = new Headers();
+        headers.append("X-Auth-token", await getAdminToken());
+
+        // Deleting the user from Keyrock
+        await fetch(`${process.env.KEYROCK_HOST}/v1/users/${req.params.uid}`, {
+            method: "delete",
+            headers,
+        }).then((res) => {
+            if (res.status !== 204) throw new ExpressError(res.statusText, res.status);
+        });
+
+        // Deleting the user and their related data from the databases
+        await User.findByIdAndDelete(req.params.uid);
+        await Cart.deleteMany({ user: req.params.uid });
+        await Product.deleteMany({ seller: req.params.uid });
+
+        // Sending success message and redirecting if the request came from the edit page
+        if (!req.query.ref) {
+            req.flash("success", "Ο χρήστης διαγράφηκε με επιτυχία.");
+            res.redirect("/administration.php");
+        } else {
+            res.status(200).send(`\
+                <div class="toast align-items-center text-bg-success fade show border-0 position-fixed bottom-0 end-0 z-index-1 me-3 mb-5"
+                    role="status" aria-live="polite" aria-atomic="true">
+                    <div class="d-flex justify-content-between fs-6">
+                        <div class="toast-body">
+                            Ο χρήστης διαγράφηκε διαγράφηκε με επιτυχία.
+                        </div>
+                        <div class="toast-body d-flex">
+                            <button class="btn-close btn-close-white mb-auto" data-bs-dismiss="toast" type="button"
+                                aria-label="Close"></button>
                         </div>
                     </div>
-                    <script src="/scripts/toast.js" type="module"></script>`);
-            }
+                </div>
+                <script src="/scripts/toast.js" type="module"></script>`);
         }
     } catch (error) {
         next(error);
     }
 };
+
+// Returns the Keyrock admin token
+async function getAdminToken() {
+    // Setting up the request headers
+    const headers = new Headers();
+    headers.append("Content-Type", "application/json");
+
+    // Setting up the request body
+    const body = {
+        name: process.env.KEYROCK_ADMIN,
+        password: process.env.KEYROCK_PASS,
+    };
+
+    // Getting the admin token
+    return fetch(`${process.env.KEYROCK_HOST}/v1/auth/tokens`, {
+        method: "post",
+        headers,
+        body: JSON.stringify(body),
+    }).then((res) => res.headers.get("X-Subject-Token"));
+}
