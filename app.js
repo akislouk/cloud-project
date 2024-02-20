@@ -19,9 +19,9 @@ import { join, dirname } from "path";
 import ExpressError from "./utils/ExpressError.js";
 import pool from "./models/db.js";
 import User from "./models/user.js";
-import usersRoutes from "./routes/users.js";
 import productsRoutes from "./routes/products.js";
 import sellersRoutes from "./routes/sellers.js";
+import usersRoutes from "./routes/users.js";
 
 // Making sure the user table and the admin exist
 pool.query(
@@ -81,18 +81,17 @@ const store = new (MySQLStore(session))({
 store.on("error", (error) => console.log("Store error ", error));
 
 // Setting up the session cookie
-const secret = process.env.SECRET || "ProjectSecret";
 const sessionConfig = {
-    store,
-    name: "session",
-    secret,
+    name: "cloud_session",
     resave: false,
     saveUninitialized: false,
+    secret: process.env.SECRET || "ProjectSecret",
+    store,
     cookie: {
         httpOnly: true,
         sameSite: "strict",
-        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
-        maxAge: 1000 * 60 * 60 * 24 * 7,
+        expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+        maxAge: 7 * 24 * 60 * 60 * 1000,
     },
 };
 app.use(session(sessionConfig));
@@ -116,14 +115,12 @@ app.use((req, res, next) => {
 });
 
 // Using my routes
-app.use("/", usersRoutes);
 app.use("/", productsRoutes);
 app.use("/", sellersRoutes);
+app.use("/", usersRoutes);
 
 // Sending a 404 error if the user tries to access a route that doesn't exist
-app.all("*", (req, res, next) =>
-    next(new ExpressError("Η σελίδα δεν βρέθηκε", 404))
-);
+app.all("*", (req, res, next) => next(new ExpressError("Η σελίδα δεν βρέθηκε", 404)));
 
 // Sending a generic error message for errors that weren't handled elsewhere
 app.use((err, req, res, next) => {

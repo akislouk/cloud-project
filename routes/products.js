@@ -1,26 +1,19 @@
 import { Router } from "express";
 import catchAsync from "../utils/catchAsync.js";
 import { isLoggedIn, isOwner } from "../middleware.js";
-import {
-    index,
-    products,
-    addToCart,
-    cart,
-    show,
-    destroy,
-} from "../controllers/products.js";
+import * as products from "../controllers/products.js";
 
 const router = Router();
-router.route("/products").get(products);
+router.route("/products").get(products.products);
 router
     .route("/products.php")
-    .get(isLoggedIn, catchAsync(index))
-    .post(isLoggedIn, catchAsync(addToCart));
+    .get(isLoggedIn, catchAsync(products.index))
+    .post(isLoggedIn, catchAsync(products.addToCart));
 
-router.route("/cart").get(cart);
+router.route("/cart").get(products.cart);
 router
     .route("/cart.php")
-    .get(isLoggedIn, catchAsync(show))
-    .delete(isLoggedIn, catchAsync(isOwner), catchAsync(destroy));
+    .get(isLoggedIn, catchAsync(products.show))
+    .delete(isLoggedIn, catchAsync(isOwner), catchAsync(products.destroy));
 
 export default router;

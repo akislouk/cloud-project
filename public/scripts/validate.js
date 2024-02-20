@@ -7,8 +7,7 @@
     Array.from(forms).forEach((form) => {
         // adding an input event listener on all inputs
         Array.from(form).forEach((el) => {
-            if (el.tagName === "INPUT")
-                el.addEventListener("input", handleInput, false);
+            if (el.tagName === "INPUT") el.addEventListener("input", handleInput, false);
         });
 
         // adding a submit event on the form

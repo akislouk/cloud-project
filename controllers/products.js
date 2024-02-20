@@ -66,7 +66,7 @@ export const addToCart = async (req, res, next) => {
     // Saving the cart to the database
     await cart
         .save()
-        .then((result) =>
+        .then(() =>
             res.status(200).send(`\
                 <div class="toast align-items-center text-bg-success fade show border-0 position-fixed bottom-0 end-0 z-index-1 me-3 mb-5"
                     role="status" aria-live="polite" aria-atomic="true">

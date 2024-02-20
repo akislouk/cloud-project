@@ -44,37 +44,31 @@ export const isOwner = async (req, res, next) => {
             // request object so that it can be used by the next middleware.
             req.product = await Product.findById(req.params.pid);
 
-            if (req.product && req.product.seller === req.user.username) next();
-            else {
-                if (!req.query.ref)
-                    next(
-                        new ExpressError(
-                            "Δεν έχετε τα απαραίτητα δικαιώματα για να πραγματοποιήσετε αυτήν την ενέργεια.",
-                            403
-                        )
-                    );
-                else
-                    res.status(403).send(`
-                        <div class="toast align-items-center text-bg-danger fade show border-0 position-fixed bottom-0 end-0 z-index-1 me-3 mb-5"
-                            role="alert" aria-live="assertive" aria-atomic="true">
-                            <div class="d-flex justify-content-between fs-6">
-                                <div class="toast-body">
-                                    Δεν έχετε τα απαραίτητα δικαιώματα για να πραγματοποιήσετε αυτήν την ενέργεια.
-                                </div>
-                                <div class="toast-body d-flex">
-                                    <button class="btn-close btn-close-white mb-auto" data-bs-dismiss="toast" type="button"
-                                        aria-label="Close"></button>
-                                </div>
-                            </div>
+            if (req.product && req.product.seller === req.user.username) return next();
+            if (!req.query.ref)
+                throw new ExpressError(
+                    "Δεν έχετε τα απαραίτητα δικαιώματα για να πραγματοποιήσετε αυτήν την ενέργεια.",
+                    403
+                );
+            res.status(403).send(`\
+                <div class="toast align-items-center text-bg-danger fade show border-0 position-fixed bottom-0 end-0 z-index-1 me-3 mb-5"
+                    role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex justify-content-between fs-6">
+                        <div class="toast-body">
+                            Δεν έχετε τα απαραίτητα δικαιώματα για να πραγματοποιήσετε αυτήν την ενέργεια.
                         </div>
-                        <script src="/scripts/toast.js" type="module"></script>`);
-            }
+                        <div class="toast-body d-flex">
+                            <button class="btn-close btn-close-white mb-auto" data-bs-dismiss="toast" type="button"
+                                aria-label="Close"></button>
+                        </div>
+                    </div>
+                </div>
+                <script src="/scripts/toast.js" type="module"></script>`);
         } else if (req.query.cid) {
             const cart = await Cart.findById(req.query.cid);
 
-            if (cart && cart.user === req.user.id) next();
-            else
-                res.status(403).send(`
+            if (cart && cart.user === req.user.id) return next();
+            res.status(403).send(`\
                 <div class="toast align-items-center text-bg-danger fade show border-0 position-fixed bottom-0 end-0 z-index-1 me-3 mb-5"
                     role="alert" aria-live="assertive" aria-atomic="true">
                     <div class="d-flex justify-content-between fs-6">
