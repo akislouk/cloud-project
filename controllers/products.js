@@ -6,7 +6,7 @@ export const products = (req, res) => res.redirect("/products.php");
 // Finds products based on the URL search params and sends them to the frontend
 export const index = async (req, res, next) => {
     try {
-        // Deconstructing the request query object
+        // Destructuring the request query object
         const { product, seller, category, date } = req.query;
         let min = 0;
         let max = 999999.99;

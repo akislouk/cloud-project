@@ -37,7 +37,7 @@ export const validateNewProduct = (req, res, next) => {
 // Creates the new product and saves it to the database
 export const create = async (req, res, next) => {
     try {
-        // Deconstructing the request body
+        // Destructuring the request body
         const { name, code, price, category } = req.body;
 
         // Using the Product class constructor to create the new product
@@ -84,7 +84,7 @@ export const validateProduct = (req, res, next) => {
 // Updates the product in the database
 export const update = async (req, res, next) => {
     try {
-        // Deconstructing the request body
+        // Destructuring the request body
         const { name, code, price, category } = req.body;
 
         // Updating the product details if any new values are given
