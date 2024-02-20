@@ -4,29 +4,22 @@
     <div class="row align-items-center justify-content-center min-vh-100 pt-66 mt-n1">
         <div class="card col-10 col-sm-8 col-md-6 text-center opacity-86">
             <main class="card-body mb-1">
-                <h1 class="display-3 mb-4">
-                    Εγγραφή
-                </h1>
+                <h1 class="display-3 mb-4">Εγγραφή</h1>
 
                 <form class="validate-form" action="/signup.php" method="post" novalidate>
                     <!-- Name -->
                     <div class="input-group mb-4">
                         <div class="form-group form-floating text-start mb-0">
-                            <input class="form-control" id="name" name="name" type="text"
-                                placeholder="Όνομα" pattern="[\p{L} ,.'’-]{0,50}" required
+                            <input class="form-control" id="name" name="name" type="text" placeholder="Όνομα"
+                                autocomplete="given-name" pattern="[\p{L} ,.'’\-]*" maxlength="50" required
                                 oninput="fullNameValidate()">
-                            <label class="text-muted opacity-100" for="name">
-                                Όνομα
-                            </label>
+                            <label class="text-muted opacity-100" for="name">Όνομα</label>
                         </div>
-
                         <div class="form-group form-floating text-start mb-0">
-                            <input class="form-control" id="surname" name="surname" type="text"
-                                placeholder="Επώνυμο" pattern="[\p{L} ,.'’-]{0,50}" required
+                            <input class="form-control" id="surname" name="surname" type="text" placeholder="Επώνυμο"
+                                autocomplete="family-name" pattern="[\p{L} ,.'’\-]*" maxlength="50" required
                                 oninput="fullNameValidate()">
-                            <label class="text-muted opacity-100" for="surname">
-                                Επώνυμο
-                            </label>
+                            <label class="text-muted opacity-100" for="surname">Επώνυμο</label>
                         </div>
                         <div class="invalid-feedback text-start" id="name-error">
                             Παρακαλώ εισάγετε ένα έγκυρο ονοματεπώνυμο.
@@ -35,29 +28,22 @@
 
                     <!-- Username -->
                     <div class="form-group form-floating text-start mb-4">
-                        <input class="form-control" id="username" name="username" type="text"
-                            placeholder="Όνομα χρήστη" pattern="[\S ]{0,50}" required>
-                        <label class="text-muted opacity-100" for="username">
-                            Όνομα χρήστη
-                        </label>
-                        <div class="invalid-feedback">
-                            Παρακαλώ εισάγετε ένα έγκυρο όνομα χρήστη.
-                        </div>
+                        <input class="form-control" id="username" name="username" type="text" placeholder="Όνομα χρήστη"
+                            autocomplete="username" pattern="[\S ]*" maxlength="50" required>
+                        <label class="text-muted opacity-100" for="username">Όνομα χρήστη</label>
+                        <div class="invalid-feedback">Παρακαλώ εισάγετε ένα έγκυρο όνομα χρήστη.</div>
                     </div>
 
                     <!-- Password -->
                     <div class="input-group mb-4">
                         <div class="form-floating text-start">
-                            <input class="form-control" id="password" name="password"
-                                placeholder="Κωδικός" type="password" pattern="[\S ]{4,20}" required
-                                aria-label="Κωδικός" aria-describedby="password-caption"
-                                aria-required="true" oninput="passwordValidate()">
-                            <label class="text-muted opacity-100" for="password">
-                                Κωδικός
-                            </label>
+                            <input class="form-control" id="password" name="password" placeholder="Κωδικός"
+                                type="password" pattern="[\S ]{4,20}" required aria-label="Κωδικός"
+                                aria-describedby="password-caption" aria-required="true" oninput="passwordValidate()">
+                            <label class="text-muted opacity-100" for="password">Κωδικός</label>
                         </div>
-                        <a class="input-group-text text-decoration-none text-gray-500"
-                            id="password-caption" href="#password">
+                        <a class="input-group-text text-decoration-none text-gray-500" id="password-caption"
+                            href="#password">
                             <i class="bi bi-eye"></i>
                         </a>
                         <div class="invalid-feedback text-start" id="password-error">
@@ -67,11 +53,9 @@
 
                     <!-- Email -->
                     <div class="form-group form-floating text-start mb-4">
-                        <input class="form-control" id="email" name="email" type="email"
-                            placeholder="Email" maxlength="255" required>
-                        <label class="text-muted opacity-100" for="email">
-                            Email
-                        </label>
+                        <input class="form-control" id="email" name="email" type="email" placeholder="Email"
+                            autocomplete="email" maxlength="255" required>
+                        <label class="text-muted opacity-100" for="email">Email</label>
                         <div class="invalid-feedback">Παρακαλώ εισάγετε ένα έγκυρο email.</div>
                     </div>
 
@@ -87,14 +71,11 @@
                         <div class="invalid-feedback text-start">Παρακαλώ επιλέξτε ρόλο.</div>
                     </div>
 
-                    <button class="btn btn-primary w-100 mb-3"
-                        onclick="{fullNameValidate(), passwordValidate()}">
+                    <button class="btn btn-primary w-100 mb-3" onclick="{fullNameValidate(), passwordValidate()}">
                         Εγγραφή
                     </button>
 
-                    <p class="text-muted mb-0">
-                        Έχετε ήδη λογαριασμό; <a href="/index.php">Συνδεθείτε!</a>
-                    </p>
+                    <p class="text-muted mb-0">Έχετε ήδη λογαριασμό; <a href="/index.php">Συνδεθείτε!</a></p>
                 </form>
             </main>
         </div>
@@ -105,9 +86,9 @@
 <script src="/scripts/eyeHandler.js"></script>
 <script>
     function fullNameValidate() {
-        if (!document.getElementById("name").checkValidity() || !document.getElementById("surname").checkValidity())
-            document.getElementById("name-error").style.display = "block";
-        else
-            document.getElementById("name-error").style.display = "none";
+        document.getElementById("name-error").style.display =
+            document.getElementById("name").checkValidity() && document.getElementById("surname").checkValidity()
+                ? "none"
+                : "block";
     }
 </script>

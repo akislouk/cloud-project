@@ -4,46 +4,33 @@
     <div class="row align-items-center justify-content-center min-vh-100 pt-66 mt-n1">
         <div class="card col-10 col-sm-8 col-md-6 text-center opacity-86">
             <main class="card-body mb-1">
-                <h1 class="display-3 mb-4">
-                    Σύνδεση
-                </h1>
+                <h1 class="display-3 mb-4">Σύνδεση</h1>
 
                 <form class="validate-form" action="/index.php" method="post" novalidate>
                     <div class="form-group form-floating text-start mb-4">
                         <input class="form-control" id="username" name="username" type="email"
-                            placeholder="Το email σας" required aria-required="true">
-                        <label class="text-muted opacity-100" for="username">
-                            Το email σας
-                        </label>
+                            placeholder="Το email σας" autocomplete="email" required aria-required="true">
+                        <label class="text-muted opacity-100" for="username">Το email σας</label>
                         <div class="invalid-feedback">Παρακαλώ εισάγετε email.</div>
                     </div>
 
                     <div class="input-group mb-4">
                         <div class="form-floating text-start">
-                            <input class="form-control" id="password" name="password"
-                                placeholder="Ο κωδικός σας" type="password" required
-                                aria-label="Ο κωδικός σας" aria-describedby="password-caption"
+                            <input class="form-control" id="password" name="password" placeholder="Ο κωδικός σας"
+                                type="password" required aria-label="Ο κωδικός σας" aria-describedby="password-caption"
                                 aria-required="true">
-                            <label class="text-muted opacity-100" for="password">
-                                Ο κωδικός σας
-                            </label>
+                            <label class="text-muted opacity-100" for="password">Ο κωδικός σας</label>
                         </div>
-                        <a class="input-group-text text-decoration-none text-gray-500"
-                            id="password-caption" href="#password">
+                        <a class="input-group-text text-decoration-none text-gray-500" id="password-caption"
+                            href="#password">
                             <i class="bi bi-eye"></i>
                         </a>
-                        <div class="invalid-feedback text-start" id="password-error">
-                            Παρακαλώ εισάγετε κωδικό.
-                        </div>
+                        <div class="invalid-feedback text-start" id="password-error">Παρακαλώ εισάγετε κωδικό.</div>
                     </div>
 
-                    <button class="btn btn-primary w-100 mb-3" onclick="passwordValidate()">
-                        Σύνδεση
-                    </button>
+                    <button class="btn btn-primary w-100 mb-3" onclick="passwordValidate()">Σύνδεση</button>
 
-                    <p class="text-muted mb-0">
-                        Δεν έχετε λογαριασμό; <a href="/signup.php">Εγγραφείτε τώρα!</a>
-                    </p>
+                    <p class="text-muted mb-0">Δεν έχετε λογαριασμό; <a href="/signup.php">Εγγραφείτε τώρα!</a></p>
                 </form>
             </main>
         </div>
